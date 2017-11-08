@@ -3,5 +3,6 @@ project(cpp_stratego_loonylemmings)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp
+        Cards/Card.hpp)
 add_executable(cpp_stratego_loonylemmings ${SOURCE_FILES})

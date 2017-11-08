@@ -1,4 +1,6 @@
 ## Stratego Game
+in C++11   
+by Loony Lemmings @Codecool BP3
 
 Flowchart/class diagram:
 
