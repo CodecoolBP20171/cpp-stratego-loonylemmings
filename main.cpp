@@ -11,6 +11,7 @@ and may not be redistributed without written permission.*/
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 
+/*
 //Starts up SDL and creates window
 bool init();
 
@@ -22,6 +23,7 @@ void close();
 
 //Loads individual image as texture
 SDL_Texture* loadTexture( std::string path );
+*/
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -87,6 +89,33 @@ bool init()
     return success;
 }
 
+SDL_Texture* loadTexture( std::string path )
+{
+    //The final texture
+    SDL_Texture* newTexture = NULL;
+
+    //Load image at specified path
+    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+    if( loadedSurface == NULL )
+    {
+        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+    }
+    else
+    {
+        //Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
+        if( newTexture == NULL )
+        {
+            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        }
+
+        //Get rid of old loaded surface
+        SDL_FreeSurface( loadedSurface );
+    }
+
+    return newTexture;
+}
+
 bool loadMedia()
 {
     //Loading success flag
@@ -121,32 +150,7 @@ void close()
     SDL_Quit();
 }
 
-SDL_Texture* loadTexture( std::string path )
-{
-    //The final texture
-    SDL_Texture* newTexture = NULL;
 
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-    if( loadedSurface == NULL )
-    {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-    }
-    else
-    {
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-        if( newTexture == NULL )
-        {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-        }
-
-        //Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
-    }
-
-    return newTexture;
-}
 
 int main( int argc, char* args[] )
 {
@@ -210,6 +214,21 @@ int main( int argc, char* args[] )
                 //Update screen
                 SDL_RenderPresent( gRenderer );
             }
+
+            //inside viewport
+            SDL_Rect insideViewport;
+            insideViewport.x = 230;
+            insideViewport.y = 230;
+            insideViewport.w = 50;
+            insideViewport.h = 50;
+            SDL_RenderSetViewport( gRenderer, &insideViewport );
+
+            //Render texture to screen
+            SDL_RenderCopy( gRenderer, bomb, NULL, NULL );
+
+            //Update screen
+            SDL_RenderPresent( gRenderer );
+            SDL_Delay(2000);
         }
     }
 
