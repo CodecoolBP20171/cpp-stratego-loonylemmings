@@ -14,7 +14,12 @@ bool GrapicalOutput::init() {
         printf( "Warning: Linear texture filtering not enabled!" );
     }
     //Create window
-    gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+    gWindow = SDL_CreateWindow("Startego Wars",
+                                SDL_WINDOWPOS_UNDEFINED,
+                                SDL_WINDOWPOS_UNDEFINED,
+                                DisplayParts::windowWidth,
+                                DisplayParts::windowHeight,
+                                SDL_WINDOW_SHOWN);
     if( !gWindow ) {
         printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
         return false;
@@ -99,11 +104,11 @@ void GrapicalOutput::printOut() {
     SDL_RenderClear( gRenderer );
 
     //set bg coordinates and render bg into it
-    SDL_Rect bg = { 0, 0, 600, 600 };
+    SDL_Rect bg = {0, 0, DisplayParts::windowHeight, DisplayParts::windowWidth};
     SDL_RenderCopy(gRenderer, pictures["Board"], nullptr, &bg);
 
     //same for bomb
-    SDL_Rect ins = {130, 130, 50, 50};
+    SDL_Rect ins = {128, 128, DisplayParts::cardWidth, DisplayParts::cardHeight};
     SDL_RenderCopy(gRenderer, pictures["P1R11"], nullptr, &ins );
 
     //show

@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "MouseInput.h"
+#include "DisplayParts.hpp"
+#include "CoordinateConverter.hpp"
 
 MouseInput::MouseInput() {}
 
@@ -18,8 +20,16 @@ MouseInput::InputType MouseInput::getUserInput() {
             if (e.type == SDL_MOUSEBUTTONDOWN) {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
-                std::cout << x << ", " << y << std::endl;
-                return MOVE;
+                std::cout << x << ", " << y;
+                switch (DisplayParts::getScreenPart(x, y)) {
+                    case DisplayParts::DisplayPart::BOARD : {
+                        std::cout << " @index: " << CoordinateConverter::getIndex(x, y) << std::endl;
+                        return MOVE;
+                    }
+                    default: {
+                        std::cout << " no clickable item here\n";
+                    }
+                }
             }
 
             if (e.type == SDL_QUIT) {

@@ -12,6 +12,7 @@
 #include <map>
 
 #include "Display.hpp"
+#include "DisplayParts.hpp"
 #include "../GameObjects/Tileset.hpp"
 
 class GrapicalOutput : public Display {
@@ -23,8 +24,6 @@ public:
     void close();
 
 private:
-    const int SCREEN_WIDTH = 600;
-    const int SCREEN_HEIGHT = 600;
 
     SDL_Window* gWindow = nullptr;
     SDL_Renderer* gRenderer = nullptr;
