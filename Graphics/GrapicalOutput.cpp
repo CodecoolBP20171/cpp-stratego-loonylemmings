@@ -100,7 +100,7 @@ GrapicalOutput::GrapicalOutput() {
     if( !loadMedia() ) { printf( "Failed to load media!\n" );}
 }
 
-void GrapicalOutput::printOut(Card* board[]) {
+void GrapicalOutput::printOut() {
 
     SDL_RenderClear( gRenderer );
 
@@ -110,10 +110,10 @@ void GrapicalOutput::printOut(Card* board[]) {
 
     int index[2];
     for (int i= 0; i<100; i++) {
-        if (board[i]) {
+        if (GameParts::board[i]) {
         CoordinateConverter::getCoordinates(i, index);
         SDL_Rect ins = {index[0], index[1], DisplayParts::cardWidth, DisplayParts::cardHeight};
-        SDL_RenderCopy(gRenderer, pictures[board[i]->getShortName()], nullptr, &ins);
+        SDL_RenderCopy(gRenderer, pictures[GameParts::board[i]->getShortName()], nullptr, &ins);
         }
     }
 

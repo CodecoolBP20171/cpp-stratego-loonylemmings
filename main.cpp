@@ -4,6 +4,13 @@
 #include "Graphics/MouseInput.h"
 #include "Logic/Game.h"
 
+Player* GameParts::player1;
+Player* GameParts::player2;
+
+Card* GameParts::p1stash[40];
+Card* GameParts::p2stash[40];
+Card* GameParts::board[100];
+
 int main( int argc, char* args[] ) {
     Game game;
 

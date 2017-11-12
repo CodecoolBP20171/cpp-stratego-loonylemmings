@@ -15,13 +15,14 @@
 #include "DisplayParts.hpp"
 #include "CoordinateConverter.hpp"
 #include "../GameObjects/Tileset.hpp"
+#include "../GameObjects/GameParts.hpp"
 
 class GrapicalOutput : public Display {
 
 public:
     GrapicalOutput();
 
-    void printOut(Card* board[]) override;
+    void printOut() override;
     void close() override;
 
 private:

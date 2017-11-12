@@ -12,19 +12,19 @@ class Player {
 public:
     Player() = delete;
 
-    explicit Player(unsigned number)
+    explicit Player(int number)
         : id(number)
     {
     shortName = 'P' + std::to_string(id);
     }
 
-    unsigned int getId() const { return id; }
+    int getId() const { return id; }
     const std::string &getShortName() const { return shortName; }
 
     virtual ~Player() = default;
 
 private:
-    unsigned id;
+    int id;
     std::string shortName;
 };
 

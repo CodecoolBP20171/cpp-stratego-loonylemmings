@@ -7,18 +7,16 @@
 #include "Game.h"
 
 Game::Game() {
-    player1 = new Player(1);
-    player2 = new Player(2);
 
+    GameParts::player1 = new Player(1);
+    GameParts::player2 = new Player(2);
+
+    GameParts::p1stash[40] = {nullptr};
+    GameParts::p2stash[40] = {nullptr};
+    GameParts::board[100] = {nullptr};
 }
 
-Game::~Game() {
-    delete player1;
-    //delete player2;
-    //delete[] p1stash;
-    //delete[] p2stash;
-    //delete[] board;
-}
+Game::~Game() {}
 
 void Game::start() {
 
@@ -29,12 +27,11 @@ void Game::start() {
     for (auto piece : pieces ) {
         int amount = piece.second;
         for (;amount > 0; amount--) {
-            board[index++] = new Card(piece.first, player1);
+            GameParts::board[index++] = new Card(piece.first, GameParts::player1);
         }
-        std::cout << std::endl;
     }
 
-    display->printOut(board);
+    display->printOut();
 
     bool quit = false;
     while(!quit) {

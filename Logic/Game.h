@@ -7,6 +7,7 @@
 
 #include "../GameObjects/Player.hpp"
 #include "../GameObjects/Card.hpp"
+#include "../GameObjects/GameParts.hpp"
 #include "../Graphics/Display.hpp"
 #include "../Graphics/UserInput.hpp"
 
@@ -22,16 +23,8 @@ public:
     void start();
 
 private:
-    Player* player1;
-    Player* player2;
-
-    Card* p1stash[40] = {nullptr};
-    Card* p2stash[40] = {nullptr};
-    Card* board[100] = {nullptr};
-
     Display* display;
     UserInput* input;
-
 };
 
 
