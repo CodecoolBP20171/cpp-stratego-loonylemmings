@@ -2,20 +2,20 @@
 #include "Graphics/Display.hpp"
 #include "Graphics/UserInput.hpp"
 #include "Graphics/MouseInput.h"
+#include "Logic/Game.h"
 
 int main( int argc, char* args[] ) {
+    Game game;
+
     Display* display = new GrapicalOutput();
     UserInput* input = new MouseInput();
 
-    display->printOut();
+    game.setDisplay(display);
+    game.setInput(input);
 
-    bool quit = false;
-    while(!quit) {
-        if (input->getUserInput() == UserInput::QUIT) {
-            quit = true;
-        }
-    }
+    game.start();
 
     display->close();
+
     return 0;
 }

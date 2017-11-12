@@ -13,6 +13,7 @@
 
 #include "Display.hpp"
 #include "DisplayParts.hpp"
+#include "CoordinateConverter.hpp"
 #include "../GameObjects/Tileset.hpp"
 
 class GrapicalOutput : public Display {
@@ -20,8 +21,8 @@ class GrapicalOutput : public Display {
 public:
     GrapicalOutput();
 
-    void printOut() override;
-    void close();
+    void printOut(Card* board[]) override;
+    void close() override;
 
 private:
 

@@ -16,7 +16,8 @@
 class Card {
 
 public:
-    explicit Card(unsigned rank, Player* player)
+
+    Card(int rank, Player* player)
         : rank(rank), owner(player)
     {
         faceUp = true;
@@ -24,15 +25,15 @@ public:
         shortName = player->getShortName() + "R" + std::to_string(rank);
     }
 
-    unsigned getRank() const { return rank; }
+    int getRank() const { return rank; }
     Player* getOwner() const { return owner; }
     bool isFaceUp() const { return faceUp; };
     int getMaxMove() const{ return maxMove; }
-    std::string& getShortName() const { return shortName; };
+    std::string getShortName() const { return shortName; };
 
     Card* getBattleResult(Card* attacker) {
 
-        unsigned attackerRank = attacker->getRank();
+        int attackerRank = attacker->getRank();
 
         if (attackerRank > rank) return attacker;
         if (attackerRank == rank) return nullptr;
@@ -41,14 +42,14 @@ public:
         return this;
     }
 
-    bool isAvailableMoveRange(unsigned move) { return maxMove >= move; }
+    bool isAvailableMoveRange(int move) { return maxMove >= move; }
 
     void flip() { faceUp = !faceUp; }
 
     virtual ~Card() = default;
 
 private:
-    unsigned rank;
+    int rank;
     Player* owner;
     bool faceUp;
     int maxMove;

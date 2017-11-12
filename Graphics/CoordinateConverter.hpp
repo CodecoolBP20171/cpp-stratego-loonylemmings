@@ -12,14 +12,18 @@ class CoordinateConverter {
 public:
 
     static void getCoordinates(int index, int (&coordinates)[2]) {
-        coordinates[0] = index%10 * DisplayParts::cardWidth
-                         + DisplayParts::boardStartX;
-        coordinates[1] = (index - index%10) * DisplayParts::cardHeight
-                         + DisplayParts::boardStartY;
+        int x = index%10;
+        int y = (index-x)/10;
+        coordinates[0] = x*DisplayParts::cardWidth
+                         + DisplayParts::boardStartX
+                         + 5*x;
+        coordinates[1] = y*DisplayParts::cardHeight
+                         + DisplayParts::boardStartY
+                         + 5*y;
     }
 
     static int getIndex(int x, int y) {
-        return (y-DisplayParts::boardStartX)/DisplayParts::cellHeight * 10
+        return (y-DisplayParts::boardStartY)/DisplayParts::cellHeight * 10
                + (x-DisplayParts::boardStartX)/DisplayParts::cellWidth;
     }
 };

@@ -1,0 +1,38 @@
+//
+// Created by jeannie on 2017.11.12..
+//
+
+#ifndef CPP_STRATEGO_LOONYLEMMINGS_GAME_H
+#define CPP_STRATEGO_LOONYLEMMINGS_GAME_H
+
+#include "../GameObjects/Player.hpp"
+#include "../GameObjects/Card.hpp"
+#include "../Graphics/Display.hpp"
+#include "../Graphics/UserInput.hpp"
+
+class Game {
+
+public:
+    Game();
+    virtual ~Game();
+
+    void setDisplay(Display* screen) { display = screen; }
+    void setInput(UserInput* user) { input = user; }
+
+    void start();
+
+private:
+    Player* player1;
+    Player* player2;
+
+    Card* p1stash[40] = {nullptr};
+    Card* p2stash[40] = {nullptr};
+    Card* board[100] = {nullptr};
+
+    Display* display;
+    UserInput* input;
+
+};
+
+
+#endif //CPP_STRATEGO_LOONYLEMMINGS_GAME_H

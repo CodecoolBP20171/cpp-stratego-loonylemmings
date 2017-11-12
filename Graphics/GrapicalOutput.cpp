@@ -2,6 +2,7 @@
 // Created by jeannie on 2017.11.11..
 //
 
+#include <iostream>
 #include "GrapicalOutput.h"
 
 bool GrapicalOutput::init() {
@@ -99,7 +100,7 @@ GrapicalOutput::GrapicalOutput() {
     if( !loadMedia() ) { printf( "Failed to load media!\n" );}
 }
 
-void GrapicalOutput::printOut() {
+void GrapicalOutput::printOut(Card* board[]) {
 
     SDL_RenderClear( gRenderer );
 
@@ -107,10 +108,16 @@ void GrapicalOutput::printOut() {
     SDL_Rect bg = {0, 0, DisplayParts::windowHeight, DisplayParts::windowWidth};
     SDL_RenderCopy(gRenderer, pictures["Board"], nullptr, &bg);
 
-    //same for bomb
-    SDL_Rect ins = {128, 128, DisplayParts::cardWidth, DisplayParts::cardHeight};
-    SDL_RenderCopy(gRenderer, pictures["P1R11"], nullptr, &ins );
+    int index[2];
+    for (int i= 0; i<100; i++) {
+        if (board[i]) {
+        CoordinateConverter::getCoordinates(i, index);
+        SDL_Rect ins = {index[0], index[1], DisplayParts::cardWidth, DisplayParts::cardHeight};
+        SDL_RenderCopy(gRenderer, pictures[board[i]->getShortName()], nullptr, &ins);
+        }
+    }
 
     //show
     SDL_RenderPresent( gRenderer );
+
 }

@@ -13,11 +13,11 @@ public:
 
     enum DisplayPart {BOARD, STASH, OK, RESET, RESTART, INVALID};
 
-    static const int windowHeight = 600;
-    static const int windowWidth = 600;
+    static const int windowHeight = 602;
+    static const int windowWidth = 602;
 
-    static const int boardStartX = 14;
-    static const int boardStartY = 14;
+    static const int boardStartX = 12;
+    static const int boardStartY = 12;
     static const int boardEndX = 586;
     static const int boardEndY = 586;
 
