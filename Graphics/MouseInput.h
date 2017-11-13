@@ -15,10 +15,10 @@ public:
     virtual ~MouseInput();
 
     InputType getUserInput() override;
-    unsigned getIndex() override;
+    int getIndex() override;
 
 private:
-    unsigned index;
+    int index;
 };
 
 

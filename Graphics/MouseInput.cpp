@@ -23,8 +23,9 @@ MouseInput::InputType MouseInput::getUserInput() {
                 std::cout << x << ", " << y;
                 switch (DisplayParts::getScreenPart(x, y)) {
                     case DisplayParts::DisplayPart::BOARD : {
-                        std::cout << " @index: " << CoordinateConverter::getIndex(x, y) << std::endl;
-                        return MOVE;
+                        index = CoordinateConverter::getIndex(x, y);
+                        std::cout << " @index: " << index << std::endl;
+                        return SELECT;
                     }
                     default: {
                         std::cout << " no clickable item here\n";
@@ -42,4 +43,4 @@ MouseInput::InputType MouseInput::getUserInput() {
     return QUIT;
 }
 
-unsigned MouseInput::getIndex() { return index;}
+int MouseInput::getIndex() { return index;}

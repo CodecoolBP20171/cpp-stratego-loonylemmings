@@ -34,9 +34,37 @@ void Game::start() {
     display->printOut();
 
     bool quit = false;
+    GameParts::selectedIndex = -1;
     while(!quit) {
-        if (input->getUserInput() == UserInput::QUIT) {
-            quit = true;
+        switch (input->getUserInput()) {
+            case UserInput::SELECT : {
+                int clickedIndex = input->getIndex();
+
+                if (GameParts::board[clickedIndex]) {
+                    GameParts::selectedIndex = clickedIndex;
+                    std::cout << "Selected "
+                              << GameParts::board[clickedIndex]->getShortName()
+                              << " on index "
+                              << clickedIndex
+                              << std::endl;
+                    display->printOut();
+                } else if (GameParts::selectedIndex >= 0) {
+                    std::cout << GameParts::board[GameParts::selectedIndex]->getShortName()
+                              << " moved to "
+                              << clickedIndex
+                              << std::endl;
+                    GameParts::board[clickedIndex] = GameParts::board[GameParts::selectedIndex];
+                    GameParts::board[GameParts::selectedIndex] = nullptr;
+                    GameParts::selectedIndex = -1;
+                    display->printOut();
+                }
+
+                break;
+            }
+
+            case UserInput::QUIT : {
+                quit = true;
+            }
         }
     }
 }

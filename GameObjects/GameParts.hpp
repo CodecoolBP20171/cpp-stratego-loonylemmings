@@ -17,6 +17,8 @@ public:
     static Card* p1stash[40];
     static Card* p2stash[40];
     static Card* board[100];
+
+    static int selectedIndex;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_GAMEPARTS_HPP

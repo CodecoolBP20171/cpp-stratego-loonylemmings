@@ -8,12 +8,12 @@
 class UserInput {
 
 public:
-    enum InputType {QUIT, OK, RESTART, MOVE};
+    enum InputType {QUIT, OK, RESTART, SELECT};
 
     UserInput() = default;
     virtual ~UserInput() = default;
     virtual InputType getUserInput() = 0;
-    virtual unsigned getIndex() = 0;
+    virtual int getIndex() = 0;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_INPUT_HPP

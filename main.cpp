@@ -11,6 +11,8 @@ Card* GameParts::p1stash[40];
 Card* GameParts::p2stash[40];
 Card* GameParts::board[100];
 
+int GameParts::selectedIndex;
+
 int main( int argc, char* args[] ) {
     Game game;
 
