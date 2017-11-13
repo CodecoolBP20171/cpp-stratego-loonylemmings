@@ -19,6 +19,10 @@ public:
     static Card* board[100];
 
     static int selectedIndex;
+
+    static bool okBtn;
+    static bool resetBtn;
+    static bool restartBtn;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_GAMEPARTS_HPP

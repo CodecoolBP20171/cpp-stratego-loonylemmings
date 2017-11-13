@@ -11,6 +11,10 @@ Card* GameParts::p1stash[40];
 Card* GameParts::p2stash[40];
 Card* GameParts::board[100];
 
+bool GameParts::okBtn;
+bool GameParts::resetBtn;
+bool GameParts::restartBtn;
+
 int GameParts::selectedIndex;
 
 int main( int argc, char* args[] ) {

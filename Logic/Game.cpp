@@ -14,6 +14,11 @@ Game::Game() {
     GameParts::p1stash[40] = {nullptr};
     GameParts::p2stash[40] = {nullptr};
     GameParts::board[100] = {nullptr};
+    GameParts::selectedIndex = -1;
+
+    GameParts::okBtn = true;
+    GameParts::resetBtn = true;
+    GameParts::restartBtn = true;
 }
 
 Game::~Game() {}
@@ -27,6 +32,7 @@ void Game::start() {
     for (auto piece : pieces ) {
         int amount = piece.second;
         for (;amount > 0; amount--) {
+            GameParts::board[index+60] = new Card(piece.first, GameParts::player2);
             GameParts::board[index++] = new Card(piece.first, GameParts::player1);
         }
     }
@@ -34,24 +40,22 @@ void Game::start() {
     display->printOut();
 
     bool quit = false;
-    GameParts::selectedIndex = -1;
     while(!quit) {
         switch (input->getUserInput()) {
             case UserInput::SELECT : {
                 int clickedIndex = input->getIndex();
 
+                if (clickedIndex>=100) { break; }
+
                 if (GameParts::board[clickedIndex]) {
                     GameParts::selectedIndex = clickedIndex;
                     std::cout << "Selected "
                               << GameParts::board[clickedIndex]->getShortName()
-                              << " on index "
-                              << clickedIndex
                               << std::endl;
                     display->printOut();
                 } else if (GameParts::selectedIndex >= 0) {
                     std::cout << GameParts::board[GameParts::selectedIndex]->getShortName()
-                              << " moved to "
-                              << clickedIndex
+                              << " moved here "
                               << std::endl;
                     GameParts::board[clickedIndex] = GameParts::board[GameParts::selectedIndex];
                     GameParts::board[GameParts::selectedIndex] = nullptr;

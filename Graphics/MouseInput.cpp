@@ -23,12 +23,30 @@ MouseInput::InputType MouseInput::getUserInput() {
                 std::cout << x << ", " << y;
                 switch (DisplayParts::getScreenPart(x, y)) {
                     case DisplayParts::DisplayPart::BOARD : {
-                        index = CoordinateConverter::getIndex(x, y);
-                        std::cout << " @index: " << index << std::endl;
+                        index = CoordinateConverter::getBoardIndex(x, y);
+                        std::cout << " clicked on BOARD @" << index << std::endl;
                         return SELECT;
                     }
+                    case DisplayParts::DisplayPart::STASH : {
+                        index = CoordinateConverter::getStashIndex(x, y);
+                        std::cout << " clicked on STASH @" << index << std::endl;
+                        index += 100;
+                        return SELECT;
+                    }
+                    case DisplayParts::DisplayPart::OK : {
+                        std::cout << " clicked on OK\n";
+                        break;
+                    }
+                    case DisplayParts::DisplayPart::RESET : {
+                        std::cout << " clicked on RESET\n";
+                        break;
+                    }
+                    case DisplayParts::DisplayPart::RESTART : {
+                        std::cout << " clicked on RESTART\n";
+                        break;
+                    }
                     default: {
-                        std::cout << " no clickable item here\n";
+                        std::cout << " nothing here\n";
                     }
                 }
             }

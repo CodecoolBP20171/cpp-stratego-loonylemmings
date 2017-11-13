@@ -105,25 +105,48 @@ void GrapicalOutput::printOut() {
     SDL_RenderClear( gRenderer );
 
     //set bg coordinates and render bg into it
-    SDL_Rect bg = {0, 0, DisplayParts::windowHeight, DisplayParts::windowWidth};
+    SDL_Rect bg = {0, 0, DisplayParts::windowWidth, DisplayParts::windowHeight};
     SDL_RenderCopy(gRenderer, pictures["Board"], nullptr, &bg);
 
     int index[2];
     for (int i= 0; i<100; i++) {
         if (GameParts::board[i]) {
-        CoordinateConverter::getCoordinates(i, index);
+            CoordinateConverter::getBoardCoordinates(i, index);
         SDL_Rect ins = {index[0], index[1], DisplayParts::cardWidth, DisplayParts::cardHeight};
         SDL_RenderCopy(gRenderer, pictures[GameParts::board[i]->getShortName()], nullptr, &ins);
         }
     }
 
     if (GameParts::selectedIndex >= 0) {
-        CoordinateConverter::getCoordinates(GameParts::selectedIndex, index);
+        CoordinateConverter::getBoardCoordinates(GameParts::selectedIndex, index);
         SDL_SetRenderDrawColor( gRenderer, 0x00, 0xFF, 0x00, 0xFF );
         SDL_Rect selection = {index[0]-2, index[1]-2, DisplayParts::cellWidth, DisplayParts::cellHeight};
         SDL_RenderDrawRect(gRenderer, &selection);
         selection = {index[0]-1, index[1]-1, DisplayParts::cellWidth-2, DisplayParts::cellHeight-2};
         SDL_RenderDrawRect(gRenderer, &selection);
+    }
+
+    if (GameParts::okBtn) {
+        SDL_Rect btn = {DisplayParts::okBtnStartX,
+                        DisplayParts::okBtnStartY,
+                        DisplayParts::okBtnWidth,
+                        DisplayParts::okBtnHeight};
+        SDL_RenderCopy(gRenderer, pictures["OkBTN"], nullptr, &btn);
+    }
+
+    if (GameParts::resetBtn) {
+        SDL_Rect btn = {DisplayParts::rBtnStartX,
+                        DisplayParts::resetBtnStartY,
+                        DisplayParts::rBtnWidth,
+                        DisplayParts::rBtnHeight};
+        SDL_RenderCopy(gRenderer, pictures["ResetBTN"], nullptr, &btn);
+    }
+    if (GameParts::restartBtn) {
+        SDL_Rect btn = {DisplayParts::rBtnStartX,
+                        DisplayParts::restartBtnStartY,
+                        DisplayParts::rBtnWidth,
+                        DisplayParts::rBtnHeight};
+        SDL_RenderCopy(gRenderer, pictures["RestartBTN"], nullptr, &btn);
     }
 
     //show

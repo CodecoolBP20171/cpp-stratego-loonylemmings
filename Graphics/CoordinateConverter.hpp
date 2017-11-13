@@ -11,20 +11,31 @@ class CoordinateConverter {
 
 public:
 
-    static void getCoordinates(int index, int (&coordinates)[2]) {
-        int x = index%10;
-        int y = (index-x)/10;
-        coordinates[0] = x*DisplayParts::cardWidth
-                         + DisplayParts::boardStartX
-                         + 5*x;
-        coordinates[1] = y*DisplayParts::cardHeight
-                         + DisplayParts::boardStartY
-                         + 5*y;
+    static void getBoardCoordinates(int index, int (&coordinates)[2]) {
+        getCoordinates(index, DisplayParts::boardStartX, DisplayParts::boardStartY, 10, coordinates);
+    }
+    static void getStashCoordinates(int index, int (&coordinates)[2]) {
+        getCoordinates(index, DisplayParts::stashStartX, DisplayParts::stashStartX, 10, coordinates);
     }
 
-    static int getIndex(int x, int y) {
-        return (y-DisplayParts::boardStartY)/DisplayParts::cellHeight * 10
-               + (x-DisplayParts::boardStartX)/DisplayParts::cellWidth;
+    static void getCoordinates(int index, int startX, int startY, int row, int (&coordinates)[2]) {
+        int x = index%row;
+        int y = (index-x)/row;
+        coordinates[0] = x*DisplayParts::cardWidth + startX + DisplayParts::cardGap*x;
+        coordinates[1] = y*DisplayParts::cardHeight + startY + DisplayParts::cardGap*y;
+    }
+
+    static int getBoardIndex(int x, int y) {
+        return getIndex(x, y, DisplayParts::boardStartX, DisplayParts::boardStartY, 10);
+    }
+
+    static int getStashIndex(int x, int y) {
+        return getIndex(x, y, DisplayParts::stashStartX, DisplayParts::stashStartY, 5);
+    }
+
+    static int getIndex(int x, int y, int startX, int startY, int row) {
+        return (y-startY)/(DisplayParts::cellHeight+DisplayParts::cardGap) * row
+               + (x-startX)/(DisplayParts::cellWidth+DisplayParts::cardGap);
     }
 };
 
