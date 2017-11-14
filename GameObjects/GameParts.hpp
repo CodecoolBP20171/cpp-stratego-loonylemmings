@@ -18,7 +18,9 @@ public:
     static Card* p2stash[40];
     static Card* board[100];
 
-    static int selectedIndex;
+    static Card** stash;
+
+    static int selected;
 
     static bool okBtn;
     static bool resetBtn;

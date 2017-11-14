@@ -7,22 +7,22 @@
 
 #include "DisplayParts.hpp"
 
-class CoordinateConverter {
+class Converter {
 
 public:
 
-    static void getBoardCoordinates(int index, int (&coordinates)[2]) {
-        getCoordinates(index, DisplayParts::boardStartX, DisplayParts::boardStartY, 10, coordinates);
+    static void getBoardCoords(int index, int (&coords)[2]) {
+        getCoords(index, DisplayParts::boardStartX, DisplayParts::boardStartY, 10, coords);
     }
-    static void getStashCoordinates(int index, int (&coordinates)[2]) {
-        getCoordinates(index, DisplayParts::stashStartX, DisplayParts::stashStartX, 10, coordinates);
+    static void getStashCoords(int index, int (&coords)[2]) {
+        getCoords(index, DisplayParts::stashStartX, DisplayParts::stashStartX, 10, coords);
     }
 
-    static void getCoordinates(int index, int startX, int startY, int row, int (&coordinates)[2]) {
+    static void getCoords(int index, int startX, int startY, int row, int (&coords)[2]) {
         int x = index%row;
         int y = (index-x)/row;
-        coordinates[0] = x*DisplayParts::cardWidth + startX + DisplayParts::cardGap*x;
-        coordinates[1] = y*DisplayParts::cardHeight + startY + DisplayParts::cardGap*y;
+        coords[0] = x*DisplayParts::cardWidth + startX + DisplayParts::cardGap*x;
+        coords[1] = y*DisplayParts::cardHeight + startY + DisplayParts::cardGap*y;
     }
 
     static int getBoardIndex(int x, int y) {

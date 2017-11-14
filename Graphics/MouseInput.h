@@ -11,11 +11,11 @@
 class MouseInput : public UserInput {
 
 public:
-    MouseInput();
-    virtual ~MouseInput();
+    MouseInput() = default;
+    ~MouseInput() = default;
 
     InputType getUserInput() override;
-    int getIndex() override;
+    int getIndex() override { return index;}
 
 private:
     int index;

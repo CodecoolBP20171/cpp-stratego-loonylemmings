@@ -25,6 +25,8 @@ public:
 private:
     Display* display;
     UserInput* input;
+
+    void fillStashes();
 };
 
 

@@ -13,7 +13,7 @@
 
 #include "Display.hpp"
 #include "DisplayParts.hpp"
-#include "CoordinateConverter.hpp"
+#include "Converter.hpp"
 #include "../GameObjects/Tileset.hpp"
 #include "../GameObjects/GameParts.hpp"
 
@@ -35,6 +35,12 @@ private:
     bool init();
     SDL_Texture* loadTexture(std::string path);
     bool loadMedia();
+
+    void drawBoard();
+
+    void drawSelection();
+    void drawButtons();
+    void drawBtn(std::string name, int x, int y, int Width, int Height);
 };
 
 

@@ -33,23 +33,23 @@ public:
     static const int cardWidth = 58;
     static const int cardGap = 3;
 
-    static const int okBtnStartX = 630;
-    static const int okBtnStartY = 500;
-    static const int okBtnWidth = 150;
-    static const int okBtnHeight = 100;
+    static const int okStartX = 630;
+    static const int okStartY = 500;
+    static const int okWidth = 150;
+    static const int okHeight = 100;
 
-    static const int rBtnStartX = 800;
-    static const int restartBtnStartY = 500;
-    static const int resetBtnStartY = 553;
-    static const int rBtnWidth = 100;
-    static const int rBtnHeight = 45;
+    static const int rStartX = 800;
+    static const int rStartY = 500;
+    static const int rstStartY = 553;
+    static const int rWidth = 100;
+    static const int rHeight = 45;
 
-    static DisplayPart getScreenPart(int x, int y) {
+    static DisplayPart getPart(int x, int y) {
         if (x>boardStartX && y>boardStartY && x<boardEndX && y<boardEndY) return BOARD;
         if (x>stashStartX && y>stashStartY && x<stashEndX && y<stashEndY) return STASH;
-        if (x>okBtnStartX && y>okBtnStartY && x<okBtnStartX+okBtnWidth && y<okBtnStartY+okBtnHeight) return OK;
-        if (x>rBtnStartX && y>resetBtnStartY && x<rBtnStartX+rBtnWidth && y<resetBtnStartY+rBtnHeight) return RESET;
-        if (x>rBtnStartX && y>restartBtnStartY && x<rBtnStartX+rBtnWidth && y<restartBtnStartY+rBtnHeight) return RESTART;
+        if (x>okStartX && y>okStartY && x<okStartX+okWidth && y<okStartY+okHeight) return OK;
+        if (x>rStartX && y>rstStartY && x<rStartX+rWidth && y<rstStartY+rHeight) return RESET;
+        if (x>rStartX && y>rStartY && x<rStartX+rWidth && y<rStartY+rHeight) return RESTART;
         return INVALID;
     }
 

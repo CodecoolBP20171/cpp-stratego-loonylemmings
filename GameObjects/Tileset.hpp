@@ -15,7 +15,7 @@ public:
         loadBaseTheme();
     }
 
-    virtual ~Tileset() {}
+    virtual ~Tileset() = default;
 
     std::map<std::string, std::string>themeSet;
 

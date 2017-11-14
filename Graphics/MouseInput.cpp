@@ -5,14 +5,11 @@
 #include <iostream>
 #include "MouseInput.h"
 #include "DisplayParts.hpp"
-#include "CoordinateConverter.hpp"
-
-MouseInput::MouseInput() {}
-
-MouseInput::~MouseInput() {}
+#include "Converter.hpp"
 
 MouseInput::InputType MouseInput::getUserInput() {
     bool quit = false;
+    index = -1;
     SDL_Event e;
 
     while(!quit) {
@@ -21,14 +18,14 @@ MouseInput::InputType MouseInput::getUserInput() {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
                 std::cout << x << ", " << y;
-                switch (DisplayParts::getScreenPart(x, y)) {
+                switch (DisplayParts::getPart(x, y)) {
                     case DisplayParts::DisplayPart::BOARD : {
-                        index = CoordinateConverter::getBoardIndex(x, y);
+                        index = Converter::getBoardIndex(x, y);
                         std::cout << " clicked on BOARD @" << index << std::endl;
                         return SELECT;
                     }
                     case DisplayParts::DisplayPart::STASH : {
-                        index = CoordinateConverter::getStashIndex(x, y);
+                        index = Converter::getStashIndex(x, y);
                         std::cout << " clicked on STASH @" << index << std::endl;
                         index += 100;
                         return SELECT;
@@ -60,5 +57,3 @@ MouseInput::InputType MouseInput::getUserInput() {
     }
     return QUIT;
 }
-
-int MouseInput::getIndex() { return index;}
