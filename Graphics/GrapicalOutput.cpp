@@ -96,11 +96,13 @@ void GrapicalOutput::printOut() {
 void GrapicalOutput::drawSelection() {
     if (GameParts::selected < 0) return;
     int index[2];
+
     Converter::getBoardCoords(GameParts::selected, index);
     SDL_SetRenderDrawColor( gRenderer, 0x00, 0xFF, 0x00, 0xFF );
-    SDL_Rect selection = {index[0]-2, index[1]-2, DisplayParts::cellWidth, DisplayParts::cellHeight};
+    SDL_Rect selection = {index[0], index[1], DisplayParts::cellWidth, DisplayParts::cellHeight};
     SDL_RenderDrawRect(gRenderer, &selection);
-    selection = {index[0]-1, index[1]-1, DisplayParts::cellWidth-2, DisplayParts::cellHeight-2};
+
+    selection = {index[0]+1, index[1]+1, DisplayParts::cellWidth-2, DisplayParts::cellHeight-2};
     SDL_RenderDrawRect(gRenderer, &selection);
 }
 

@@ -15,7 +15,7 @@ public:
         getCoords(index, DisplayParts::boardStartX, DisplayParts::boardStartY, 10, coords);
     }
     static void getStashCoords(int index, int (&coords)[2]) {
-        getCoords(index, DisplayParts::stashStartX, DisplayParts::stashStartX, 10, coords);
+        getCoords(index, DisplayParts::stashStartX, DisplayParts::stashStartX, 5, coords);
     }
 
     static void getCoords(int index, int startX, int startY, int row, int (&coords)[2]) {
