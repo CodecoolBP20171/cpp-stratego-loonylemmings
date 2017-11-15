@@ -11,20 +11,32 @@
 class GameParts {
 
 public:
-    static Player* player1;
-    static Player* player2;
 
-    static Card* p1stash[40];
-    static Card* p2stash[40];
-    static Card* board[100];
+    GameParts() {
+        p1stash.fill(nullptr);
+        p2stash.fill(nullptr);
+        board.fill(nullptr);
 
-    static Card** stash;
+        selected = -1;
+        stash = &p1stash;
 
-    static int selected;
+        okBtn = true;
+        resetBtn = true;
+        restartBtn = true;
+    }
 
-    static bool okBtn;
-    static bool resetBtn;
-    static bool restartBtn;
+    virtual ~GameParts() {}
+
+    std::array<Card*, 40> p1stash;
+    std::array<Card*, 40> p2stash;
+    std::array<Card*, 100> board;
+
+    int selected;
+    std::array<Card*, 40>* stash;
+
+    bool okBtn;
+    bool resetBtn;
+    bool restartBtn;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_GAMEPARTS_HPP

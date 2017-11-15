@@ -6,28 +6,15 @@
 #include <iostream>
 #include "Game.h"
 
-Game::Game() {
-
-    GameParts::player1 = new Player(1);
-    GameParts::player2 = new Player(2);
-
-    GameParts::p1stash[40] = {nullptr};
-    GameParts::p2stash[40] = {nullptr};
-    GameParts::board[100] = {nullptr};
-    GameParts::stash = GameParts::p1stash;
-
-    GameParts::selected = -1;
-
-    GameParts::okBtn = true;
-    GameParts::resetBtn = true;
-    GameParts::restartBtn = true;
-}
+Game::Game()
+    : player1(1), player2(2), gameObjects(new GameParts()) {}
 
 Game::~Game() {}
 
 void Game::start() {
 
     fillStashes();
+    display->setResource(gameObjects);
     display->printOut();
 
     bool quit = false;
@@ -40,15 +27,15 @@ void Game::start() {
                 if (index>99) {
                     break;
                 }
-                if (GameParts::board[index]) {
-                    GameParts::selected = index;
-                    std::cout << "Selected " << GameParts::board[index]->getShortName() << std::endl;
+                if (gameObjects->board[index]) {
+                    gameObjects->selected = index;
+                    std::cout << "Selected " << gameObjects->board[index]->getShortName() << std::endl;
                     display->printOut();
-                } else if (GameParts::selected >= 0) {
-                    std::cout << GameParts::board[GameParts::selected]->getShortName() << " moved here " << std::endl;
-                    GameParts::board[index] = GameParts::board[GameParts::selected];
-                    GameParts::board[GameParts::selected] = nullptr;
-                    GameParts::selected = -1;
+                } else if (gameObjects->selected >= 0) {
+                    std::cout << gameObjects->board[gameObjects->selected]->getShortName() << " moved here " << std::endl;
+                    gameObjects->board[index] = gameObjects->board[gameObjects->selected];
+                    gameObjects->board[gameObjects->selected] = nullptr;
+                    gameObjects->selected = -1;
                     display->printOut();
                 }
                 break;
@@ -69,8 +56,8 @@ void Game::fillStashes() {
         int amount = piece.second;
         for (;amount > 0; amount--) {
             //TODO: the stashes should be filled here
-            GameParts::board[index+60] = new Card(piece.first, GameParts::player2);
-            GameParts::board[index++] = new Card(piece.first, GameParts::player1);
+            gameObjects->board[index+60] = new Card(piece.first, player2);
+            gameObjects->board[index++] = new Card(piece.first, player1);
         }
     }
 }

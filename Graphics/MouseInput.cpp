@@ -4,8 +4,6 @@
 
 #include <iostream>
 #include "MouseInput.h"
-#include "DisplayParts.hpp"
-#include "Converter.hpp"
 
 MouseInput::InputType MouseInput::getUserInput() {
     bool quit = false;
@@ -15,17 +13,17 @@ MouseInput::InputType MouseInput::getUserInput() {
     while(!quit) {
         while( SDL_PollEvent( &e ) != 0 ) {
             if (e.type == SDL_MOUSEBUTTONDOWN) {
-                int x, y;
-                SDL_GetMouseState(&x, &y);
-                std::cout << x << ", " << y;
-                switch (DisplayParts::getPart(x, y)) {
+                DPBase click(0, 0);
+                SDL_GetMouseState(&click.startX, &click.startY);
+                std::cout << click.startX << ", " << click.startY;
+                switch (gOutput.getPart(click)) {
                     case DisplayParts::DisplayPart::BOARD : {
-                        index = Converter::getBoardIndex(x, y);
+                        index = gOutput.board.getIndex(click);
                         std::cout << " clicked on BOARD @" << index << std::endl;
                         return SELECT;
                     }
                     case DisplayParts::DisplayPart::STASH : {
-                        index = Converter::getStashIndex(x, y);
+                        index = gOutput.stash.getIndex(click);
                         std::cout << " clicked on STASH @" << index << std::endl;
                         index += 100;
                         return SELECT;

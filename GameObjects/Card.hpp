@@ -17,18 +17,19 @@ class Card {
 
 public:
 
-    Card(int rank, Player* player)
-        : rank(rank), owner(player)
+    Card(int rank, Player& player)
+        : rank(rank)
     {
         faceUp = true;
         maxMove = ((rank == 0)||(rank == 11)) ? 0 : (rank == 2) ? 10 : 1;
-        shortName = player->getShortName() + "R" + std::to_string(rank);
+        shortName = player.getShortName() + "R" + std::to_string(rank);
+        backSide = player.getShortName() + "BG";
     }
 
     int getRank() const { return rank; }
-    Player* getOwner() const { return owner; }
     bool isFaceUp() const { return faceUp; };
     int getMaxMove() const{ return maxMove; }
+    std::string getBackSide() const { return backSide; }
     std::string getShortName() const { return shortName; };
 
     Card* getBattleResult(Card* attacker) {
@@ -49,11 +50,11 @@ public:
     virtual ~Card() = default;
 
 private:
-    int rank;
-    Player* owner;
-    bool faceUp;
+    const int rank;
     int maxMove;
+    bool faceUp;
     std::string shortName;
+    std::string backSide;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_CARD_HPP

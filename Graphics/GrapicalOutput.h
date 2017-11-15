@@ -10,10 +10,10 @@
 #include <cstdio>
 #include <string>
 #include <map>
+#include <bits/unique_ptr.h>
 
 #include "Display.hpp"
-#include "DisplayParts.hpp"
-#include "Converter.hpp"
+#include "Init/DisplayParts.hpp"
 #include "../GameObjects/Tileset.hpp"
 #include "../GameObjects/GameParts.hpp"
 
@@ -22,6 +22,7 @@ class GrapicalOutput : public Display {
 public:
     GrapicalOutput();
 
+    void setResource(GameParts* parts) override;
     void printOut() override;
     void close() override;
 
@@ -29,18 +30,17 @@ private:
 
     SDL_Window* gWindow = nullptr;
     SDL_Renderer* gRenderer = nullptr;
+    const DisplayParts dParts;
 
     std::map<std::string, SDL_Texture*> pictures;
 
     bool init();
     SDL_Texture* loadTexture(std::string path);
     bool loadMedia();
-
     void drawBoard();
-
     void drawSelection();
     void drawButtons();
-    void drawBtn(std::string name, int x, int y, int Width, int Height);
+    void drawBtn(std::string name, DPElem button);
 };
 
 

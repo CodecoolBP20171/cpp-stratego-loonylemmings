@@ -7,11 +7,12 @@
 
 #include <SDL.h>
 #include "UserInput.hpp"
+#include "Init/DisplayParts.hpp"
 
 class MouseInput : public UserInput {
 
 public:
-    MouseInput() = default;
+    MouseInput() : gOutput() {}
     ~MouseInput() = default;
 
     InputType getUserInput() override;
@@ -19,6 +20,7 @@ public:
 
 private:
     int index;
+    DisplayParts gOutput;
 };
 
 

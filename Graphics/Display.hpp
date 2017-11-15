@@ -5,7 +5,7 @@
 #ifndef CPP_STRATEGO_LOONYLEMMINGS_OUTPUT_HPP
 #define CPP_STRATEGO_LOONYLEMMINGS_OUTPUT_HPP
 
-#include "../GameObjects/Card.hpp"
+#include "../GameObjects/GameParts.hpp"
 
 class Display {
 
@@ -14,8 +14,11 @@ public:
     virtual ~Display() = default;
 
     virtual void printOut() = 0;
+    virtual void setResource(GameParts* parts) = 0;
     virtual void close() = 0;
 
+protected:
+    GameParts* game;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_OUTPUT_HPP

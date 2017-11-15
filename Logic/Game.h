@@ -26,6 +26,10 @@ private:
     Display* display;
     UserInput* input;
 
+    Player player1;
+    Player player2;
+    GameParts* gameObjects;
+
     void fillStashes();
 };
 
