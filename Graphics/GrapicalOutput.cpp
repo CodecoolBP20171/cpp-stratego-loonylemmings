@@ -53,10 +53,18 @@ SDL_Texture* GrapicalOutput::loadTexture(std::string path) {
 
 bool GrapicalOutput::loadMedia() {
     Tileset set;
+    //set.loadBaseTheme();
+    set.loadSWTheme();
     for (auto &tiles : set.themeSet) {
         SDL_Texture* card = loadTexture("../Tiles/" + tiles.second);
         if(card) { pictures[tiles.first] = card; }
     }
+
+    SDL_Rect bg = dParts.window.getRect();
+    SDL_RenderCopy(gRenderer, pictures["Splash"], nullptr, &bg);
+    SDL_RenderPresent(gRenderer);
+    SDL_Delay(3000);
+
     return true;
 }
 
@@ -82,7 +90,6 @@ GrapicalOutput::GrapicalOutput()
 {
     if( !init() ) { printf( "Failed to initialize!\n" ); }
     if( !loadMedia() ) { printf( "Failed to load media!\n" );}
-
 }
 
 void GrapicalOutput::printOut() {

@@ -14,7 +14,7 @@
 
 #include "Display.hpp"
 #include "Init/DisplayParts.hpp"
-#include "../GameObjects/Tileset.hpp"
+#include "Init/Tileset.hpp"
 #include "../GameObjects/GameParts.hpp"
 
 class GrapicalOutput : public Display {
