@@ -34,8 +34,7 @@ void Game::start() {
                     display->printOut();
                 } else if (gameObjects->selected >= 0) {
                     std::cout << gameObjects->board[gameObjects->selected]->getShortName() << " moved here " << std::endl;
-                    gameObjects->board[index] = gameObjects->board[gameObjects->selected];
-                    gameObjects->board[gameObjects->selected] = nullptr;
+                    gameObjects->board[index].swap(gameObjects->board[gameObjects->selected]);
                     gameObjects->selected = -1;
                     display->printOut();
                 }
@@ -57,8 +56,8 @@ void Game::fillStashes() {
         int amount = piece.second;
         for (;amount > 0; amount--) {
             //TODO: the stashes should be filled here
-            gameObjects->board[index+60] = new Card(piece.first, player2);
-            gameObjects->board[index++] = new Card(piece.first, player1);
+            gameObjects->board[index+60].reset(new Card(piece.first, player2));
+            gameObjects->board[index++].reset(new Card(piece.first, player1));
         }
     }
 }

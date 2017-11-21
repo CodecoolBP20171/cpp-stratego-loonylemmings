@@ -5,10 +5,6 @@
 #ifndef CPP_STRATEGO_LOONYLEMMINGS_GAME_H
 #define CPP_STRATEGO_LOONYLEMMINGS_GAME_H
 
-#include <memory>
-#include <bits/unique_ptr.h>
-#include <bits/shared_ptr.h>
-
 #include "../GameObjects/Player.hpp"
 #include "../GameObjects/Card.hpp"
 #include "../GameObjects/GameParts.hpp"

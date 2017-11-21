@@ -5,6 +5,10 @@
 #ifndef CPP_STRATEGO_LOONYLEMMINGS_GAMEPARTS_HPP
 #define CPP_STRATEGO_LOONYLEMMINGS_GAMEPARTS_HPP
 
+#include <memory>
+#include <bits/unique_ptr.h>
+#include <bits/shared_ptr.h>
+
 #include "Player.hpp"
 #include "Card.hpp"
 
@@ -13,12 +17,18 @@ class GameParts {
 public:
 
     GameParts() {
-        p1stash.fill(nullptr);
-        p2stash.fill(nullptr);
-        board.fill(nullptr);
+
+        for (auto i = 0; i<40; i++) {
+            p1stash[i].reset();
+            p2stash[i].reset();
+            board[i].reset();
+        }
+
+        for (auto i = 40; i<100; i++) {
+            board[i].reset();
+        }
 
         selected = -1;
-        stash = &p1stash;
 
         okBtn = true;
         resetBtn = true;
@@ -27,12 +37,12 @@ public:
 
     virtual ~GameParts() {}
 
-    std::array<Card*, 40> p1stash;
-    std::array<Card*, 40> p2stash;
-    std::array<Card*, 100> board;
+    std::array<std::unique_ptr<Card>, 40> p1stash;
+    std::array<std::unique_ptr<Card>, 40> p2stash;
+    std::array<std::unique_ptr<Card>, 100> board;
 
     int selected;
-    std::array<Card*, 40>* stash;
+    std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> stash;
 
     bool okBtn;
     bool resetBtn;
