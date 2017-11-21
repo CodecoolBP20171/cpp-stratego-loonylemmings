@@ -70,7 +70,7 @@ bool GrapicalOutput::loadMedia() {
     SDL_Rect bg = dParts.window.getRect();
     SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
     SDL_RenderPresent(gRenderer.get());
-    SDL_Delay(3000);
+    SDL_Delay(500);
 
     return true;
 }
@@ -111,8 +111,11 @@ void GrapicalOutput::drawSelection() {
     if (game->selected < 0) return;
     int index = game->selected;
     DPBase obj = dParts.board.getCoords(index);
+    if (index>99) obj = dParts.stash.getCoords(index-100);
     SDL_SetRenderDrawColor( gRenderer.get(), 0x00, 0xFF, 0x00, 0xFF );
     SDL_Rect sel = dParts.field.getRect(obj);
+    SDL_RenderDrawRect(gRenderer.get(), &sel);
+    sel.x++; sel.y++; sel.w -= 2; sel.h -= 2;
     SDL_RenderDrawRect(gRenderer.get(), &sel);
 }
 
@@ -133,12 +136,20 @@ void GrapicalOutput::drawBtn(std::string name, DPElem button) {
     SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &btn);
 }
 
-//TODO: this should also handle stashes
 void GrapicalOutput::drawBoard() {
 
+    for (int i= 0; i<40; i++) {
+        if ((*game->stash)[i]) {
+            std::string name = (*game->stash)[i]->getShortName();
+            DPBase obj = dParts.stash.getCoords(i);
+            SDL_Rect ins = dParts.field.getRect(obj);
+            SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);
+        }
+    }
+
     for (int i= 0; i<100; i++) {
-        if (game->board[i]) {
-            std::string name = game->board[i]->getShortName();
+        if ((*game->board)[i]) {
+            std::string name = (*game->board)[i]->getShortName();
             DPBase obj = dParts.board.getCoords(i);
             SDL_Rect ins = dParts.field.getRect(obj);
             SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);

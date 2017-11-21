@@ -23,9 +23,8 @@ MouseInput::InputType MouseInput::getUserInput() {
                         return SELECT;
                     }
                     case DisplayParts::DisplayPart::STASH : {
-                        index = gOutput.stash.getIndex(click);
+                        index = gOutput.stash.getIndex(click)+100;
                         std::cout << " clicked on STASH @" << index << std::endl;
-                        index += 100;
                         return SELECT;
                     }
                     case DisplayParts::DisplayPart::OK : {

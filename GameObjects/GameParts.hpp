@@ -18,16 +18,21 @@ public:
 
     GameParts() {
 
+        p1stash.reset(new(std::array<std::unique_ptr<Card>, 40>));
+        p2stash.reset(new(std::array<std::unique_ptr<Card>, 40>));
+        board.reset(new(std::array<std::unique_ptr<Card>, 100>));
+
         for (auto i = 0; i<40; i++) {
-            p1stash[i].reset();
-            p2stash[i].reset();
-            board[i].reset();
+            (*p1stash)[i].reset();
+            (*p2stash)[i].reset();
+            (*board)[i].reset();
         }
 
         for (auto i = 40; i<100; i++) {
-            board[i].reset();
+            (*board)[i].reset();
         }
 
+        stash = p1stash;
         selected = -1;
 
         okBtn = true;
@@ -37,9 +42,9 @@ public:
 
     virtual ~GameParts() {}
 
-    std::array<std::unique_ptr<Card>, 40> p1stash;
-    std::array<std::unique_ptr<Card>, 40> p2stash;
-    std::array<std::unique_ptr<Card>, 100> board;
+    std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> p1stash;
+    std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> p2stash;
+    std::unique_ptr<std::array<std::unique_ptr<Card>, 100>> board;
 
     int selected;
     std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> stash;

@@ -13,18 +13,21 @@ public:
     Player() = delete;
 
     explicit Player(int number)
-        : id(number)
+        : id(number), state(false)
     {
     shortName = 'P' + std::to_string(id);
     }
 
     int getId() const { return id; }
+    bool getState() { return state; }
     const std::string &getShortName() const { return shortName; }
 
+    void setState(bool active) { state = active; }
     virtual ~Player() = default;
 
 private:
     int id;
+    bool state;
     std::string shortName;
 };
 
