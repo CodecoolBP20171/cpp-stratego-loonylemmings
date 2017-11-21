@@ -5,6 +5,8 @@
 #include <iostream>
 #include "GrapicalOutput.h"
 
+
+
 bool GrapicalOutput::init() {
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
         printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
@@ -13,19 +15,30 @@ bool GrapicalOutput::init() {
     if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) ) {
         printf( "Warning: Linear texture filtering not enabled!" );
     }
-    gWindow = SDL_CreateWindow("Startego Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                               dParts.window.width, dParts.window.height, SDL_WINDOW_SHOWN);
-    if( !gWindow ) {
+
+    std::unique_ptr<SDL_Window, sdl_deleter> window(
+            SDL_CreateWindow("Startego Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                             dParts.window.width, dParts.window.height, SDL_WINDOW_SHOWN),
+            sdl_deleter());
+    if( !window ) {
         printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
         return false;
     }
-    gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-    if( !gRenderer ) {
+
+    gWindow = std::move(window);
+
+    std::unique_ptr<SDL_Renderer, sdl_deleter> renderer(
+            SDL_CreateRenderer( gWindow.get(), -1, SDL_RENDERER_ACCELERATED ),
+            sdl_deleter());
+
+    if( !renderer ) {
         printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
         return false;
     }
 
-    SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    gRenderer = std::move(renderer);
+
+    SDL_SetRenderDrawColor( gRenderer.get(), 0xFF, 0xFF, 0xFF, 0xFF );
 
     int imgFlags = IMG_INIT_PNG;
     if( !( IMG_Init( imgFlags ) & imgFlags ) ) {
@@ -35,52 +48,39 @@ bool GrapicalOutput::init() {
     return true;
 }
 
-SDL_Texture* GrapicalOutput::loadTexture(std::string path) {
-    SDL_Texture* newTexture = nullptr;
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-
-    if(!loadedSurface) {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-    } else {
-        newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-        if(!newTexture) {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-        }
-        SDL_FreeSurface(loadedSurface);
-    }
-    return newTexture;
-}
-
 bool GrapicalOutput::loadMedia() {
     Tileset set;
-    //set.loadBaseTheme();
-    set.loadSWTheme();
+    set.loadBaseTheme();
+    //set.loadSWTheme();
+    SDL_Surface* loadedSurface = nullptr;
+
     for (auto &tiles : set.themeSet) {
-        SDL_Texture* card = loadTexture("../Tiles/" + tiles.second);
-        if(card) { pictures[tiles.first] = card; }
+        auto path = "../Tiles/" + tiles.second;
+        loadedSurface = IMG_Load(path.c_str());
+
+        std::unique_ptr<SDL_Texture, sdl_deleter> newTexture(
+                                    SDL_CreateTextureFromSurface(gRenderer.get(), loadedSurface),
+                                    sdl_deleter());
+
+        pictures[tiles.first] = std::move(newTexture);
     }
 
+    SDL_FreeSurface(loadedSurface);
+
     SDL_Rect bg = dParts.window.getRect();
-    SDL_RenderCopy(gRenderer, pictures["Splash"], nullptr, &bg);
-    SDL_RenderPresent(gRenderer);
+    SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
+    SDL_RenderPresent(gRenderer.get());
     SDL_Delay(3000);
 
     return true;
 }
 
-void GrapicalOutput::setResource(GameParts* parts) {
+void GrapicalOutput::setResource(std::shared_ptr<GameParts> parts) {
     game = parts;
 }
 
 void GrapicalOutput::close() {
-    for (const auto &picture : pictures) {
-        SDL_DestroyTexture(pictures[picture.first]);
-    }
     pictures.clear();
-    SDL_DestroyRenderer( gRenderer );
-    SDL_DestroyWindow( gWindow );
-    gWindow = nullptr;
-    gRenderer = nullptr;
     IMG_Quit();
     SDL_Quit();
 }
@@ -94,16 +94,16 @@ GrapicalOutput::GrapicalOutput()
 
 void GrapicalOutput::printOut() {
 
-    SDL_RenderClear(gRenderer);
+    SDL_RenderClear(gRenderer.get());
 
     SDL_Rect bg = dParts.window.getRect();
-    SDL_RenderCopy(gRenderer, pictures["Board"], nullptr, &bg);
+    SDL_RenderCopy(gRenderer.get(), pictures["Board"].get(), nullptr, &bg);
 
     drawBoard();
     drawSelection();
     drawButtons();
 
-    SDL_RenderPresent(gRenderer);
+    SDL_RenderPresent(gRenderer.get());
 
 }
 
@@ -111,9 +111,9 @@ void GrapicalOutput::drawSelection() {
     if (game->selected < 0) return;
     int index = game->selected;
     DPBase obj = dParts.board.getCoords(index);
-    SDL_SetRenderDrawColor( gRenderer, 0x00, 0xFF, 0x00, 0xFF );
+    SDL_SetRenderDrawColor( gRenderer.get(), 0x00, 0xFF, 0x00, 0xFF );
     SDL_Rect sel = dParts.field.getRect(obj);
-    SDL_RenderDrawRect(gRenderer, &sel);
+    SDL_RenderDrawRect(gRenderer.get(), &sel);
 }
 
 void GrapicalOutput::drawButtons() {
@@ -130,7 +130,7 @@ void GrapicalOutput::drawButtons() {
 
 void GrapicalOutput::drawBtn(std::string name, DPElem button) {
     SDL_Rect btn = button.getRect();
-    SDL_RenderCopy(gRenderer, pictures[name], nullptr, &btn);
+    SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &btn);
 }
 
 //TODO: this should also handle stashes
@@ -141,7 +141,7 @@ void GrapicalOutput::drawBoard() {
             std::string name = game->board[i]->getShortName();
             DPBase obj = dParts.board.getCoords(i);
             SDL_Rect ins = dParts.field.getRect(obj);
-            SDL_RenderCopy(gRenderer, pictures[name], nullptr, &ins);
+            SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);
         }
     }
 }

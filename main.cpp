@@ -7,8 +7,8 @@
 int main( int argc, char* args[] ) {
     Game game;
 
-    Display* display = new GrapicalOutput();
-    UserInput* input = new MouseInput();
+    std::shared_ptr<Display> display(new GrapicalOutput());
+    std::shared_ptr<UserInput> input(new MouseInput());
 
     game.setDisplay(display);
     game.setInput(input);

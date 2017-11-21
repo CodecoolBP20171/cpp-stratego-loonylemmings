@@ -7,7 +7,8 @@
 #include "Game.h"
 
 Game::Game()
-    : player1(1), player2(2), gameObjects(new GameParts()) {}
+    : player1(1), player2(2), gameObjects(new GameParts())
+{}
 
 Game::~Game() {}
 
