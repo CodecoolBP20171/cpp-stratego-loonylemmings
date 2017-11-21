@@ -149,7 +149,9 @@ void GrapicalOutput::drawBoard() {
 
     for (int i= 0; i<100; i++) {
         if ((*game->board)[i]) {
-            std::string name = (*game->board)[i]->getShortName();
+            std::string name = (*game->board)[i]->isFaceUp()
+                               ? (*game->board)[i]->getShortName()
+                               : (*game->board)[i]->getBackSide();
             DPBase obj = dParts.board.getCoords(i);
             SDL_Rect ins = dParts.field.getRect(obj);
             SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);

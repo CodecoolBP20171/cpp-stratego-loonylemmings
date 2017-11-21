@@ -31,6 +31,7 @@ private:
     std::shared_ptr<GameParts> gameObjects;
 
     void fillStashes();
+    void nextPlayer();
 };
 
 

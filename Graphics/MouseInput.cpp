@@ -29,7 +29,7 @@ MouseInput::InputType MouseInput::getUserInput() {
                     }
                     case DisplayParts::DisplayPart::OK : {
                         std::cout << " clicked on OK\n";
-                        break;
+                        return OK;
                     }
                     case DisplayParts::DisplayPart::RESET : {
                         std::cout << " clicked on RESET\n";
