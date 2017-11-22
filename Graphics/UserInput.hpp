@@ -8,7 +8,7 @@
 class UserInput {
 
 public:
-    enum InputType {QUIT, OK, RESTART, SELECT};
+    enum InputType {QUIT, OK, RESTART, SELECT, RESET, NOTHING};
 
     UserInput() = default;
     virtual ~UserInput() = default;

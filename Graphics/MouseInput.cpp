@@ -33,7 +33,7 @@ MouseInput::InputType MouseInput::getUserInput() {
                     }
                     case DisplayParts::DisplayPart::RESET : {
                         std::cout << " clicked on RESET\n";
-                        break;
+                        return RESET;
                     }
                     case DisplayParts::DisplayPart::RESTART : {
                         std::cout << " clicked on RESTART\n";
@@ -41,6 +41,7 @@ MouseInput::InputType MouseInput::getUserInput() {
                     }
                     default: {
                         std::cout << " nothing here\n";
+                        return NOTHING;
                     }
                 }
             }

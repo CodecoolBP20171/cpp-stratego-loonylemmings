@@ -67,10 +67,7 @@ bool GrapicalOutput::loadMedia() {
 
     SDL_FreeSurface(loadedSurface);
 
-    SDL_Rect bg = dParts.window.getRect();
-    SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
-    SDL_RenderPresent(gRenderer.get());
-    SDL_Delay(500);
+    printPause();
 
     return true;
 }
@@ -90,6 +87,12 @@ GrapicalOutput::GrapicalOutput()
 {
     if( !init() ) { printf( "Failed to initialize!\n" ); }
     if( !loadMedia() ) { printf( "Failed to load media!\n" );}
+}
+
+void GrapicalOutput::printPause(){
+    SDL_Rect bg = dParts.window.getRect();
+    SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
+    SDL_RenderPresent(gRenderer.get());
 }
 
 void GrapicalOutput::printOut() {

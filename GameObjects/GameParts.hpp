@@ -18,23 +18,23 @@ public:
         p1stash = std::make_shared<std::vector<std::unique_ptr<Card>>>();
         p2stash = std::make_shared<std::vector<std::unique_ptr<Card>>>();
 
+        stash = p1stash;
+
         board.reset(new(std::array<std::unique_ptr<Card>, 100>));
+        for (auto i = 0; i<100; i++) { (*board)[i].reset(); }
 
         player1 = std::make_shared<Player>(1);
         player2 = std::make_shared<Player>(2);
-
+        player1->setState(true);
+        player2->setState(false);
         player = player1;
 
-        for (auto i = 0; i<100; i++) {
-            (*board)[i].reset();
-        }
-
-        stash = p1stash;
         selected = -1;
+        wrong = -1;
 
-        okBtn = true;
-        resetBtn = true;
-        restartBtn = true;
+        okBtn = false;
+        resetBtn = false;
+        restartBtn = false;
     }
 
     virtual ~GameParts() {}
