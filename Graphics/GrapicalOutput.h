@@ -48,6 +48,7 @@ private:
     bool loadMedia();
     void drawBoard();
     void drawSelection();
+    void drawFrame(int index);
     void drawButtons();
     void drawBtn(std::string name, DPElem button);
 };

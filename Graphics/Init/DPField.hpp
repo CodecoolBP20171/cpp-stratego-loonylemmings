@@ -23,6 +23,10 @@ public:
         return {content.startX, content.startY, cardW, cardH};
     }
 
+    void setInnerRect(SDL_Rect &sel) const {
+        sel.x++; sel.y++; sel.w -= 2; sel.h -= 2;
+    }
+
     const int gap;
     const int cellW;
     const int cellH;

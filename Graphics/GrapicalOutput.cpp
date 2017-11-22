@@ -108,14 +108,23 @@ void GrapicalOutput::printOut() {
 }
 
 void GrapicalOutput::drawSelection() {
-    if (game->selected < 0) return;
-    int index = game->selected;
-    DPBase obj = dParts.board.getCoords(index);
-    if (index>99) obj = dParts.stash.getCoords(index-100);
-    SDL_SetRenderDrawColor( gRenderer.get(), 0x00, 0xFF, 0x00, 0xFF );
+    if (game->selected > 0) {
+        SDL_SetRenderDrawColor( gRenderer.get(), 0x00, 0xFF, 0x00, 0xFF );
+        drawFrame(game->selected);
+    }
+    if (game->wrong > 0) {
+        SDL_SetRenderDrawColor( gRenderer.get(), 0xFF, 0x00, 0x00, 0xFF );
+        drawFrame(game->wrong);
+    }
+}
+
+void GrapicalOutput::drawFrame(int index) {
+
+    DPBase obj = (index>99) ? dParts.stash.getCoords(index-100) : dParts.board.getCoords(index);
+
     SDL_Rect sel = dParts.field.getRect(obj);
     SDL_RenderDrawRect(gRenderer.get(), &sel);
-    sel.x++; sel.y++; sel.w -= 2; sel.h -= 2;
+    dParts.field.setInnerRect(sel);
     SDL_RenderDrawRect(gRenderer.get(), &sel);
 }
 

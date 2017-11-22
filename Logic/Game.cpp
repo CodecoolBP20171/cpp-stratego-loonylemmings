@@ -33,11 +33,11 @@ void Game::start() {
     bool quit = false;
     while(!quit) {
 
+        gameObjects->wrong = -1;
         switch (input->getUserInput()) {
 
             case UserInput::SELECT : {
                 int index = input->getIndex();
-                gameObjects->wrong = -1;
 
                 if (index>99&&index<=gameObjects->stash->size()+99) {
                         gameObjects->selected = index;
