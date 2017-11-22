@@ -138,7 +138,9 @@ void GrapicalOutput::drawBtn(std::string name, DPElem button) {
 
 void GrapicalOutput::drawBoard() {
 
-    for (int i= 0; i<40; i++) {
+    auto size = game->stash->size();
+
+    for (int i= 0; i<size; i++) {
         if ((*game->stash)[i]) {
             std::string name = (*game->stash)[i]->getShortName();
             DPBase obj = dParts.stash.getCoords(i);

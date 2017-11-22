@@ -7,6 +7,7 @@
 
 #include "Player.hpp"
 #include "Card.hpp"
+#include <vector>
 
 class GameParts {
 
@@ -14,8 +15,8 @@ public:
 
     GameParts() {
 
-        p1stash = std::make_shared<std::array <std::unique_ptr<Card>, 40>>();
-        p2stash = std::make_shared<std::array <std::unique_ptr<Card>, 40>>();
+        p1stash = std::make_shared<std::vector<std::unique_ptr<Card>>>();
+        p2stash = std::make_shared<std::vector<std::unique_ptr<Card>>>();
 
         board.reset(new(std::array<std::unique_ptr<Card>, 100>));
 
@@ -23,11 +24,6 @@ public:
         player2 = std::make_shared<Player>(2);
 
         player = player1;
-
-        for (auto i = 0; i<40; i++) {
-            (*p1stash)[i].reset();
-            (*p2stash)[i].reset();
-        }
 
         for (auto i = 0; i<100; i++) {
             (*board)[i].reset();
@@ -46,14 +42,16 @@ public:
     std::shared_ptr<Player> player1;
     std::shared_ptr<Player> player2;
 
-    std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> p1stash;
-    std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> p2stash;
+    std::shared_ptr<std::vector<std::unique_ptr<Card>>> p1stash;
+    std::shared_ptr<std::vector<std::unique_ptr<Card>>> p2stash;
+
     std::unique_ptr<std::array<std::unique_ptr<Card>, 100>> board;
 
     int selected;
     int wrong;
 
-    std::shared_ptr<std::array<std::unique_ptr<Card>, 40>> stash;
+    std::shared_ptr<std::vector<std::unique_ptr<Card>>> stash;
+
     std::shared_ptr<Player> player;
 
     bool okBtn;
