@@ -8,15 +8,19 @@
 #include "Game.h"
 
 Game::Game()
-    : player1(1), player2(2), gameObjects(new GameParts())
+    : gameObjects(new GameParts())
 {}
 
 Game::~Game() {}
 
 void Game::nextPlayer() {
-    player1.setState(!player1.getState());
-    player2.setState(!player2.getState());
-    gameObjects->stash = player1.getState() ? gameObjects->p1stash : gameObjects->p2stash;
+
+    gameObjects->player1->setState(!gameObjects->player1->getState());
+    gameObjects->player2->setState(!gameObjects->player2->getState());
+
+    gameObjects->stash = gameObjects->player1->getState() ? gameObjects->p1stash : gameObjects->p2stash;
+    gameObjects->player = gameObjects->player1->getState() ? gameObjects->player1 : gameObjects->player2;
+
     for (auto i=0; i<100; i++) { if ((*gameObjects->board)[i]) { (*gameObjects->board)[i]->flip(); }}
 }
 
@@ -43,8 +47,7 @@ void Game::start() {
                     break;
                 }
 
-
-                if (player1.getState()&&index>59||player2.getState()&&index<40) {
+                if (gameObjects->player->isInMyArea(index)) {
 
                     if ((*gameObjects->board)[index]) {
                         gameObjects->selected = index;
@@ -87,13 +90,13 @@ void Game::fillStashes() {
     for (auto piece : pieces ) {
         int amount = piece.second;
         for (;amount > 0; amount--) {
-            (*gameObjects->p1stash)[index].reset(new Card(piece.first, player1));
-            (*gameObjects->p2stash)[index++].reset(new Card(piece.first, player2));
+            (*gameObjects->p1stash)[index].reset(new Card(piece.first, gameObjects->player1));
+            (*gameObjects->p2stash)[index++].reset(new Card(piece.first, gameObjects->player2));
         }
     }
-    player1.setState(true);
+    gameObjects->player1->setState(true);
     gameObjects->stash = gameObjects->p1stash;
-    player2.setState(false);
+    gameObjects->player2->setState(false);
 }
 
 

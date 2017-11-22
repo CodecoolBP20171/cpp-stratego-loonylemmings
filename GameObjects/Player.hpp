@@ -16,17 +16,26 @@ public:
         : id(number), state(false)
     {
     shortName = 'P' + std::to_string(id);
+    firstTile = (id == 1) ? 0 : 60;
+    lastTile = firstTile + 39;
     }
 
     int getId() const { return id; }
+
     bool getState() { return state; }
+
     const std::string &getShortName() const { return shortName; }
 
+    bool isInMyArea(int index) { return index<=lastTile&&index>=firstTile; }
+
     void setState(bool active) { state = active; }
+
     virtual ~Player() = default;
 
 private:
     int id;
+    int firstTile;
+    int lastTile;
     bool state;
     std::string shortName;
 };

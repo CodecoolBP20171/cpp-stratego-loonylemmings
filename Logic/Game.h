@@ -26,8 +26,6 @@ private:
     std::shared_ptr<Display> display;
     std::shared_ptr<UserInput> input;
 
-    Player player1;
-    Player player2;
     std::shared_ptr<GameParts> gameObjects;
 
     void fillStashes();

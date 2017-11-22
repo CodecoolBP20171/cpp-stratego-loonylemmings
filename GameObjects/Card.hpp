@@ -7,6 +7,10 @@
 
 #include <string>
 
+#include <memory>
+#include <bits/unique_ptr.h>
+#include <bits/shared_ptr.h>
+
 //ranks:
 // 0 - flag, 1 - spy, 2 - scout, 3 - miner,
 // 4...9 - soldiers, 10 - general, 11 - bomb
@@ -17,13 +21,13 @@ class Card {
 
 public:
 
-    Card(int rank, Player& player)
-        : rank(rank)
+    Card(int rank, std::shared_ptr<Player> player)
+        : rank(rank), owner(player)
     {
         faceUp = true;
         maxMove = ((rank == 0)||(rank == 11)) ? 0 : (rank == 2) ? 10 : 1;
-        shortName = player.getShortName() + "R" + std::to_string(rank);
-        backSide = player.getShortName() + "BG";
+        shortName = player->getShortName() + "R" + std::to_string(rank);
+        backSide = player->getShortName() + "BG";
     }
 
     int getRank() const { return rank; }
@@ -51,6 +55,7 @@ public:
 
 private:
     const int rank;
+    std::shared_ptr<Player> owner;
     int maxMove;
     bool faceUp;
     std::string shortName;
