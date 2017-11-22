@@ -5,11 +5,9 @@
 #ifndef CPP_STRATEGO_LOONYLEMMINGS_GAME_H
 #define CPP_STRATEGO_LOONYLEMMINGS_GAME_H
 
-#include "../GameObjects/Player.hpp"
-#include "../GameObjects/Card.hpp"
-#include "../GameObjects/GameParts.hpp"
 #include "../Graphics/Display.hpp"
 #include "../Graphics/UserInput.hpp"
+#include "StepValidator.h"
 
 class Game {
 
@@ -27,12 +25,13 @@ private:
     std::shared_ptr<UserInput> input;
 
     std::shared_ptr<GameParts> gameObjects;
+    StepValidator validator;
 
     void fillStash();
     void reset();
 
     bool placeCards();
-
+    void step(int index);
     void nextPlayer();
 };
 

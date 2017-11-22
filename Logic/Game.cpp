@@ -8,8 +8,10 @@
 #include "Game.h"
 
 Game::Game()
-    : gameObjects(new GameParts())
-{}
+    : gameObjects(new GameParts()), validator()
+{
+    validator.setGameObjects(gameObjects);
+}
 
 Game::~Game() {}
 
@@ -36,11 +38,13 @@ void Game::start() {
     display->setResource(gameObjects);
     input->getUserInput();
     display->printOut();
+
     if (!placeCards()) return;
     display->printPause();
     nextPlayer();
     input->getUserInput();
     display->printOut();
+
     if (!placeCards()) return;
     nextPlayer();
 }
@@ -51,63 +55,25 @@ bool Game::placeCards() {
     gameObjects->resetBtn = false;
 
     while(!quit) {
-
         gameObjects->wrong = -1;
         switch (input->getUserInput()) {
-
             case UserInput::SELECT : {
                 int index = input->getIndex();
-
-                if (index>99&&index<=gameObjects->stash->size()+99) {
-                        gameObjects->selected = index;
-                        std::cout << "Selected " << (*gameObjects->stash)[index-100]->getShortName() << std::endl;
-                        display->printOut();
-                        break;
-                    }
-
-                if (gameObjects->player->isInMyArea(index)) {
-
-                    if ((*gameObjects->board)[index]) {
-                        gameObjects->selected = index;
-                        std::cout << "Selected " << (*gameObjects->board)[index]->getShortName() << std::endl;
-                        display->printOut();
-                        break;
-                    }
-
-                    if (gameObjects->selected >= 0) {
-
-                        if (gameObjects->selected > 99) {
-                            auto card = gameObjects->selected - 100;
-                            std::cout << (*gameObjects->stash)[card]->getShortName() << " moved here " << std::endl;
-                            (*gameObjects->board)[index] = std::move((*gameObjects->stash)[card]);
-                            gameObjects->stash->erase(gameObjects->stash->begin()+card);
-                        } else {
-                            std::cout << (*gameObjects->board)[gameObjects->selected]->getShortName() << " moved here " << std::endl;
-                            (*gameObjects->board)[index].swap((*gameObjects->board)[gameObjects->selected]);
-                        }
-
-                        if (gameObjects->stash->empty()) { gameObjects->okBtn = true; }
-                        if (gameObjects->stash->size()==35) { gameObjects->resetBtn = true; }
-
-                        gameObjects->selected = -1;
-                        display->printOut();
-                        break;
-                    }
-                }
-                gameObjects->wrong = index;
-                display->printOut();
+                if (validator.checkPlacement(index)) {
+                    step(index);
+                    //if (gameObjects->stash->empty()) { gameObjects->okBtn = true; }
+                    if (gameObjects->stash->size()==35) { gameObjects->okBtn = true; }
+                    if (gameObjects->stash->size()==35) { gameObjects->resetBtn = true; }
+                };
                 break;
             }
-
             case UserInput::QUIT : {
                 return false;
             }
-
             case UserInput::RESET : {
                 gameObjects->okBtn = false;
                 gameObjects->resetBtn = false;
                 reset();
-                display->printOut();
                 break;
             }
 
@@ -116,6 +82,7 @@ bool Game::placeCards() {
                 return true;
             }
         }
+        display->printOut();
     }
 }
 
@@ -139,6 +106,18 @@ void Game::reset() {
     }
     gameObjects->stash->clear();
     fillStash();
+}
+
+void Game::step(int index) {
+    auto card = gameObjects->selected;
+    gameObjects->selected = -1;
+    if (card < 100) {
+        (*gameObjects->board)[index].swap((*gameObjects->board)[card]);
+        return;
+    }
+    card -= 100;
+    (*gameObjects->board)[index] = std::move((*gameObjects->stash)[card]);
+    gameObjects->stash->erase(gameObjects->stash->begin()+card);
 }
 
 
