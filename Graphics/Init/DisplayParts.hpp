@@ -22,8 +22,8 @@ public:
     const DPContainer board = DPContainer(12, 12, 10, 10, field);
     const DPContainer stash = DPContainer(640, 12, 5, 8, field);
     const DPElem okBTN = DPElem(640, 510, 150, 100);
-    const DPElem restartBTN = DPElem(810, 510, 100, 45);
-    const DPElem resetBTN = DPElem(810, 563, 100, 45);
+    const DPElem resetBTN = DPElem(810, 510, 100, 45);
+    const DPElem restartBTN = DPElem(810, 563, 100, 45);
 
     DisplayPart getPart(DPBase& index) {
         if (board.isInside(index)) return BOARD;

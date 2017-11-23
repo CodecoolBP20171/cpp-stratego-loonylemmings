@@ -33,6 +33,8 @@ private:
     bool placeCards();
     void step(int index);
     void nextPlayer();
+
+    void setDemoBoard(int index);
 };
 
 

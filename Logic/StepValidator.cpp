@@ -14,7 +14,7 @@ bool StepValidator::checkPlacement(int index) {
     auto stash = game->stash.lock();
     auto player = game->player.lock();
 
-    if (index>99 && index<=stash->size()+99) {
+    if (index > 99 && index <= stash->size()+99) {
         game->selected = index;
         return false;
     }

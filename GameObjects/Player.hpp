@@ -13,7 +13,7 @@ public:
     Player() = delete;
 
     explicit Player(int number)
-        : id(number), state(false)
+        : id(number), active(false)
     {
     shortName = 'P' + std::to_string(id);
     firstTile = (id == 1) ? 0 : 60;
@@ -22,13 +22,13 @@ public:
 
     int getId() const { return id; }
 
-    bool getState() { return state; }
+    bool isActive() { return active; }
 
     const std::string &getShortName() const { return shortName; }
 
     bool isInMyArea(int index) { return index<=lastTile&&index>=firstTile; }
 
-    void setState(bool active) { state = active; }
+    void setActive(bool state) { active = state; }
 
     virtual ~Player() = default;
 
@@ -36,7 +36,7 @@ private:
     int id;
     int firstTile;
     int lastTile;
-    bool state;
+    bool active;
     std::string shortName;
 };
 

@@ -17,11 +17,11 @@ Game::~Game() {}
 
 void Game::nextPlayer() {
 
-    gameObjects->player1->setState(!gameObjects->player1->getState());
-    gameObjects->player2->setState(!gameObjects->player2->getState());
+    gameObjects->player1->setActive(!gameObjects->player1->isActive());
+    gameObjects->player2->setActive(!gameObjects->player2->isActive());
 
-    gameObjects->stash = gameObjects->player1->getState() ? gameObjects->p1stash : gameObjects->p2stash;
-    gameObjects->player = gameObjects->player1->getState() ? gameObjects->player1 : gameObjects->player2;
+    gameObjects->stash = gameObjects->player1->isActive() ? gameObjects->p1stash : gameObjects->p2stash;
+    gameObjects->player = gameObjects->player1->isActive() ? gameObjects->player1 : gameObjects->player2;
 
     for (auto i=0; i<100; i++) { if ((*gameObjects->board)[i]) { (*gameObjects->board)[i]->flip(); }}
 
@@ -39,6 +39,14 @@ void Game::start() {
     fillStash();
     nextPlayer();
     display->setResource(gameObjects);
+    setDemoBoard(0);
+    input->getUserInput();
+    display->printOut();
+
+    if (!placeCards()) return;
+    display->printPause();
+    nextPlayer();
+    setDemoBoard(60);
     input->getUserInput();
     display->printOut();
 
@@ -47,9 +55,7 @@ void Game::start() {
     nextPlayer();
     input->getUserInput();
     display->printOut();
-
-    if (!placeCards()) return;
-    nextPlayer();
+    input->getUserInput();
 }
 
 bool Game::placeCards() {
@@ -60,7 +66,7 @@ bool Game::placeCards() {
 
     bool quit = false;
     gameObjects->okBtn = false;
-    gameObjects->resetBtn = false;
+    gameObjects->resetBtn = true;
 
 
     while(!quit) {
@@ -71,8 +77,8 @@ bool Game::placeCards() {
                 if (validator.checkPlacement(index)) {
                     step(index);
                     //if (gameObjects->stash->empty()) { gameObjects->okBtn = true; }
-                    if (stash->size()==35) { gameObjects->okBtn = true; }
-                    if (stash->size()==39) { gameObjects->resetBtn = true; }
+                    if (stash->empty()) { gameObjects->okBtn = true; }
+                    //if (stash->size()==5) { gameObjects->resetBtn = true; }
                 };
                 break;
             }
@@ -81,14 +87,22 @@ bool Game::placeCards() {
             }
             case UserInput::RESET : {
                 gameObjects->okBtn = false;
-                gameObjects->resetBtn = false;
+                //gameObjects->resetBtn = false;
                 reset();
+                break;
+            }
+            case UserInput::RESTART : {
+                if (stash->size()==40) {
+                    int index = player->isInMyArea(0) ? 0 : 60;
+                    setDemoBoard(index);
+                }
                 break;
             }
 
             case UserInput::OK : {
-                gameObjects->resetBtn = false;
-                return true;
+                //gameObjects->resetBtn = false;
+                if (stash->empty()) return true;
+                break;
             }
         }
         display->printOut();
@@ -108,6 +122,16 @@ void Game::fillStash() {
             std::unique_ptr<Card> card (new Card(piece.first, player));
             stash->push_back(std::move(card));
         }
+    }
+}
+
+void Game::setDemoBoard(int index) {
+    int end = index+37;
+    auto stash = gameObjects->stash.lock();
+
+    for (; index<end; index++) {
+        (*gameObjects->board)[index] = std::move((*stash)[0]);
+        stash->erase(stash->begin());
     }
 }
 

@@ -48,8 +48,8 @@ bool GrapicalOutput::init() {
 
 bool GrapicalOutput::loadMedia() {
     Tileset set;
-    set.loadBaseTheme();
-    //set.loadSWTheme();
+    //set.loadBaseTheme();
+    set.loadSWTheme();
     SDL_Surface* loadedSurface = nullptr;
 
     for (auto &tiles : set.themeSet) {

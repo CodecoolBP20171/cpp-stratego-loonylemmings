@@ -20,15 +20,14 @@ public:
 
         stash = p1stash;
 
-
-
         board.reset(new(std::array<std::unique_ptr<Card>, 100>));
         for (auto i = 0; i<100; i++) { (*board)[i].reset(); }
 
         player1 = std::make_shared<Player>(1);
         player2 = std::make_shared<Player>(2);
-        player1->setState(true);
-        player2->setState(false);
+        player1->setActive(true);
+        player2->setActive(false);
+
         player = player1;
 
         selected = -1;
