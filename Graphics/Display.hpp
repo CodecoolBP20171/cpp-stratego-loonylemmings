@@ -19,11 +19,11 @@ public:
     virtual void printOut() = 0;
     virtual void printPause() = 0;
 
-    virtual void setResource(std::shared_ptr<GameParts> parts) = 0;
+    virtual void setResource(std::shared_ptr<GameParts>& parts) = 0;
     virtual void close() = 0;
 
 protected:
-    std::shared_ptr<GameParts> game;
+    std::weak_ptr<GameParts> game;
 };
 
 #endif //CPP_STRATEGO_LOONYLEMMINGS_OUTPUT_HPP

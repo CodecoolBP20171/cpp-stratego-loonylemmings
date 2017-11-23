@@ -20,6 +20,8 @@ public:
 
         stash = p1stash;
 
+
+
         board.reset(new(std::array<std::unique_ptr<Card>, 100>));
         for (auto i = 0; i<100; i++) { (*board)[i].reset(); }
 
@@ -50,9 +52,8 @@ public:
     int selected;
     int wrong;
 
-    std::shared_ptr<std::vector<std::unique_ptr<Card>>> stash;
-
-    std::shared_ptr<Player> player;
+    std::weak_ptr<std::vector<std::unique_ptr<Card>>> stash;
+    std::weak_ptr<Player> player;
 
     bool okBtn;
     bool resetBtn;

@@ -15,14 +15,14 @@ public:
     Game();
     virtual ~Game();
 
-    void setDisplay(std::shared_ptr<Display> screen) { display = screen; }
-    void setInput(std::shared_ptr<UserInput> user) { input = user; }
+    void setDisplay(std::shared_ptr<Display>& screen) { out = screen; }
+    void setInput(std::shared_ptr<UserInput>& user) { in = user; }
 
     void start();
 
 private:
-    std::shared_ptr<Display> display;
-    std::shared_ptr<UserInput> input;
+    std::weak_ptr<Display> out;
+    std::weak_ptr<UserInput> in;
 
     std::shared_ptr<GameParts> gameObjects;
     StepValidator validator;

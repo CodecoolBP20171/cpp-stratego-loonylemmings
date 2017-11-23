@@ -9,23 +9,25 @@ StepValidator::StepValidator() {}
 StepValidator::~StepValidator() {}
 
 bool StepValidator::checkPlacement(int index) {
-    if (index>99&&index<=gameObjects->stash->size()+99) {
-        gameObjects->selected = index;
+
+    auto game = gameObjects.lock();
+    auto stash = game->stash.lock();
+    auto player = game->player.lock();
+
+    if (index>99 && index<=stash->size()+99) {
+        game->selected = index;
         return false;
     }
 
-    if (gameObjects->player->isInMyArea(index)) {
-        if ((*gameObjects->board)[index]) {
-            gameObjects->selected = index;
+    if (player->isInMyArea(index)) {
+        if ((*game->board)[index]) {
+            game->selected = index;
             return false;
         }
-        if (gameObjects->selected >= 0) {
+        if (game->selected >= 0) {
             return true;
         }
     }
-    gameObjects->wrong = index;
+    game->wrong = index;
     return false;
 }
-
-
-

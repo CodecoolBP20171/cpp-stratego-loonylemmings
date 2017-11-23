@@ -25,7 +25,7 @@ class GrapicalOutput : public Display {
 public:
     GrapicalOutput();
 
-    void setResource(std::shared_ptr<GameParts> parts) override;
+    void setResource(std::shared_ptr<GameParts>& parts) override;
     void printOut() override;
     void printPause() override;
     void close() override;
@@ -41,6 +41,7 @@ private:
 
     std::unique_ptr<SDL_Window, sdl_deleter> gWindow = nullptr;
     std::unique_ptr<SDL_Renderer, sdl_deleter> gRenderer = nullptr;
+
     const DisplayParts dParts;
 
     std::map< std::string, std::unique_ptr<SDL_Texture, sdl_deleter> > pictures;

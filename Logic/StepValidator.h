@@ -24,7 +24,7 @@ public:
     bool checkPlacement(int index);
 
 private:
-    std::shared_ptr<GameParts> gameObjects;
+    std::weak_ptr<GameParts> gameObjects;
 };
 
 
