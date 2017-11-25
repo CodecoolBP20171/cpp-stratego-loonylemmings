@@ -28,11 +28,13 @@ private:
     StepValidator validator;
 
     void fillStash();
+    void initGame();
     void reset();
+    void step(int index);
 
     UserInput::InputType placeCards();
-    void step(int index);
-    void initGame();
+    UserInput::InputType round();
+
 };
 
 

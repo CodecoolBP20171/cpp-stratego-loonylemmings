@@ -21,6 +21,7 @@ public:
 
     //player operations
 
+    player_sptr getActualPlayer();
     void switchPlayers();
     int getPlayerAreaStart();
     bool isInPlayerArea(int index);
@@ -41,6 +42,7 @@ public:
     void flipPlayerCardsUp();
     void destroyPlayerCards();
     void flipCard(int index);
+    player_sptr getOwnerAt(int index);
 
     bool isCardInBoardAt(int index);
 

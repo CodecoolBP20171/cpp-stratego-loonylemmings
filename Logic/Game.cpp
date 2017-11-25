@@ -15,6 +15,18 @@ Game::Game()
 
 Game::~Game() {}
 
+void Game::fillStash() {
+
+    std::map<int, int> pieces = {{0, 1}, {1, 1}, {2, 8}, {3, 5}, {4, 4}, {5, 4},
+                                 {6, 4}, {7, 3}, {8, 2}, {9, 1}, {10, 1}, {11, 6}};
+    for (auto piece : pieces ) {
+        int amount = piece.second;
+        for (;amount > 0; amount--) {
+            gameObjects->createCardInActualStash(piece.first);
+        }
+    }
+}
+
 void Game::initGame() {
     fillStash();
     gameObjects->switchPlayers();
@@ -23,22 +35,22 @@ void Game::initGame() {
     gameObjects->hideButtons();
 }
 
-UserInput::InputType Game::start() {
+void Game::reset() {
+    gameObjects->destroyPlayerCards();
+    gameObjects->clearPlayerStash();
+    fillStash();
+}
 
-    initGame();
+void Game::step(int index) {
+    auto card = gameObjects->getSelected();
+    gameObjects->setSelected(-1);
 
-    auto display = out.lock();
-    auto input = in.lock();
-
-    display->setResource(gameObjects);
-    display->printOut();
-
-    UserInput::InputType result = placeCards();
-    if (result != UserInput::OK) return result;
-
-    result = placeCards();
-    if (result != UserInput::OK) return result;
-    input->getUserInput();
+    if (card < 100) {
+        gameObjects->boardSwap(index, card);
+        return;
+    }
+    card -= 100;
+    gameObjects->moveCardFromStashToBoard(card, index);
 }
 
 UserInput::InputType Game::placeCards() {
@@ -46,6 +58,9 @@ UserInput::InputType Game::placeCards() {
     auto input = in.lock();
 
     bool quit = false;
+    gameObjects->showOk();
+    display->printOut();
+
     while(!quit) {
         gameObjects->setError(-1);
 
@@ -55,9 +70,9 @@ UserInput::InputType Game::placeCards() {
                 int index = input->getIndex();
                 if (validator.checkPlacement(index)) {
                     step(index);
-                    if (gameObjects->isActualStashEmpty()) { gameObjects->showOk(); }
-                    gameObjects->showReset(); }
-
+                    //if (gameObjects->isActualStashEmpty()) { gameObjects->showOk(); }
+                    //gameObjects->showReset();
+                    }
                 break;
             }
 
@@ -78,6 +93,12 @@ UserInput::InputType Game::placeCards() {
                     gameObjects->hideButtons();
                     display->printOut();
                     return UserInput::OK;
+                } else {
+                    auto first = gameObjects->getPlayerAreaStart();
+                    for (auto i=0; i<40; i++) {
+                        gameObjects->setSelected(100);
+                        step(first+i);
+                    }
                 }
                 break;
             }
@@ -86,34 +107,90 @@ UserInput::InputType Game::placeCards() {
     }
 }
 
-void Game::fillStash() {
+UserInput::InputType Game::round() {
+    auto display = out.lock();
+    auto input = in.lock();
+    bool quit = false;
+    bool stepDone = false;
+    int from;
+    int to;
+    gameObjects->flipPlayerCardsUp();
+    display->printOut();
 
-    std::map<int, int> pieces = {{0, 1}, {1, 1}, {2, 8}, {3, 5}, {4, 4}, {5, 4},
-                                 {6, 4}, {7, 3}, {8, 2}, {9, 1}, {10, 1}, {11, 6}};
-    for (auto piece : pieces ) {
-        int amount = piece.second;
-        for (;amount > 0; amount--) {
-            gameObjects->createCardInActualStash(piece.first);
+    while(!quit) {
+        gameObjects->setError(-1);
+        switch (input->getUserInput()) {
+
+            case UserInput::SELECT : {
+                if (stepDone) { break; }
+                int index = input->getIndex();
+                if (validator.checkStep(index)) {
+                    from = gameObjects->getSelected();
+                    to = index;
+                    if (!validator.checkBattle()) {
+                        step(index);
+                    }
+                    stepDone = true;
+                    gameObjects->showOk();
+                    gameObjects->showReset();
+                }
+                break;
+            }
+
+            case UserInput::QUIT : { return UserInput::QUIT; }
+
+            case UserInput::RESTART : { return UserInput::RESTART; }
+
+            case UserInput::RESET : {
+                if (!stepDone) { break; }
+                gameObjects->hideButtons();
+                stepDone = false;
+                gameObjects->setSelected(to);
+                step(from);
+                break;
+            }
+
+            case UserInput::OK : {
+                if (stepDone) {
+                    gameObjects->flipCardsDown();
+                    gameObjects->switchPlayers();
+                    gameObjects->hideButtons();
+                    display->printOut();
+                    return UserInput::OK;
+                }
+                break;
+            }
         }
+        display->printOut();
     }
 }
 
-void Game::reset() {
-    gameObjects->destroyPlayerCards();
-    gameObjects->clearPlayerStash();
-    fillStash();
+UserInput::InputType Game::start() {
+
+    initGame();
+
+    auto display = out.lock();
+    auto input = in.lock();
+
+    display->setResource(gameObjects);
+    display->printOut();
+
+    UserInput::InputType result = placeCards();
+    if (result != UserInput::OK) return result;
+
+    result = placeCards();
+    if (result != UserInput::OK) return result;
+
+    do {
+        input->getUserInput();
+        result = round();
+    } while (result == UserInput::OK);
+
+    return result;
 }
 
-void Game::step(int index) {
-    auto card = gameObjects->getSelected();
-    gameObjects->setSelected(-1);
 
-    if (card < 100) {
-        gameObjects->boardSwap(index, card);
-        return;
-    }
-    card -= 100;
-    gameObjects->moveCardFromStashToBoard(card, index);
-}
+
+
 
 

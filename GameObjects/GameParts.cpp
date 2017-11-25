@@ -41,6 +41,8 @@ int GameParts::getPlayerAreaStart() {
 
 bool GameParts::isInPlayerArea(int index) { return activePlayer.lock()->isInMyArea(index); }
 
+player_sptr GameParts::getActualPlayer() { return activePlayer.lock(); }
+
 //stash operations
 
 bool GameParts::isActualStashEmpty() { return activeStash.lock()->empty(); }
@@ -81,7 +83,12 @@ void GameParts::destroyPlayerCards() {
 
 void GameParts::flipCard(int index) { board->flip(index); }
 
-bool GameParts::isCardInBoardAt(int index) { return board->isCardAt(index); }
+bool GameParts::isCardInBoardAt(int index) {
+    if (index < 0) return false;
+    return board->isCardAt(index);
+}
+
+player_sptr GameParts::getOwnerAt(int index) { return board->getOwnerOf(index); }
 
 card_uptr& GameParts::getCardFromBoard(int index) { return board->getCard(index); }
 

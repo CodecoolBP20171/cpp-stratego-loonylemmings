@@ -110,11 +110,11 @@ void GrapicalOutput::drawSelection() {
 
     auto highlight = game.lock();
 
-    if (highlight->getSelected() > 0) {
+    if (highlight->getSelected() >= 0) {
         SDL_SetRenderDrawColor( gRenderer.get(), 0x00, 0xFF, 0x00, 0xFF );
         drawFrame(highlight->getSelected());
     }
-    if (highlight->getError() > 0) {
+    if (highlight->getError() >= 0) {
         SDL_SetRenderDrawColor( gRenderer.get(), 0xFF, 0x00, 0x00, 0xFF );
         drawFrame(highlight->getError());
     }

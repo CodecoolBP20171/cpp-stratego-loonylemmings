@@ -19,10 +19,19 @@ public:
 
     void setGameObjects(std::shared_ptr<GameParts>& go) { gameObjects = go; }
 
+    bool isMovableCard(int index);
+    bool isInside(int x, int y);
+    bool isInTheLake(int index);
+    bool isValidRange(int from, int to);
+    bool isReacheableForAScout(int from, int to);
+
     bool checkPlacement(int index);
+    bool checkStep(int index);
+    bool checkBattle() { return battle; };
 
 private:
     std::weak_ptr<GameParts> gameObjects;
+    bool battle;
 };
 
 
