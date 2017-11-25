@@ -13,9 +13,15 @@ PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 # end of copy
 
+set(SOURCE_FILES
+        main.cpp
+        GameObjects/Card.hpp GameObjects/Player.hpp GameObjects/Board.hpp GameObjects/GameParts.cpp GameObjects/GameParts.h
+        Graphics/UserInput.hpp Graphics/Display.hpp Graphics/GrapicalOutput.cpp Graphics/GrapicalOutput.h
+        Graphics/Init/Tileset.hpp Graphics/Init/DisplayParts.hpp
+        Graphics/Init/DPBase.hpp Graphics/Init/DPContainer.hpp Graphics/Init/DPElem.hpp Graphics/Init/DPField.hpp
+        Graphics/MouseInput.cpp Graphics/MouseInput.h
+        Logic/Game.cpp Logic/Game.h Logic/StepValidator.cpp Logic/StepValidator.h)
 
-set(SOURCE_FILES main.cpp
-        GameObjects/Card.hpp GameObjects/Player.hpp Graphics/UserInput.hpp Graphics/Display.hpp Graphics/GrapicalOutput.cpp Graphics/GrapicalOutput.h Graphics/Init/Tileset.hpp Graphics/MouseInput.cpp Graphics/MouseInput.h Graphics/Init/DisplayParts.hpp Logic/Game.cpp Logic/Game.h GameObjects/GameParts.hpp Graphics/Init/DPBase.hpp Graphics/Init/DPContainer.hpp Graphics/Init/DPElem.hpp Graphics/Init/DPField.hpp Logic/StepValidator.cpp Logic/StepValidator.h)
 add_executable(cpp_stratego_loonylemmings ${SOURCE_FILES})
 
 target_link_libraries(cpp_stratego_loonylemmings ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES})

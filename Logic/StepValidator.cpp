@@ -11,23 +11,21 @@ StepValidator::~StepValidator() {}
 bool StepValidator::checkPlacement(int index) {
 
     auto game = gameObjects.lock();
-    auto stash = game->stash.lock();
-    auto player = game->player.lock();
 
-    if (index>99 && index<=stash->size()+99) {
-        game->selected = index;
+    if (index>99 && game->isCardInStashAt(index-100)) {
+        game->setSelected(index);
         return false;
     }
 
-    if (player->isInMyArea(index)) {
-        if ((*game->board)[index]) {
-            game->selected = index;
+    if (game->isInPlayerArea(index)) {
+        if (game->getCardFromBoard(index)) {
+            game->setSelected(index);
             return false;
         }
-        if (game->selected >= 0) {
+        if (game->getSelected() >= 0) {
             return true;
         }
     }
-    game->wrong = index;
+    game->setError(index);
     return false;
 }

@@ -5,17 +5,22 @@
 #include "Logic/Game.h"
 
 int main( int argc, char* args[] ) {
-    Game game;
 
     std::shared_ptr<Display> display(new GrapicalOutput());
     std::shared_ptr<UserInput> input(new MouseInput());
 
-    game.setDisplay(display);
-    game.setInput(input);
+    bool quit = false;
 
-    game.start();
+    do {
+        Game game;
+
+        game.setDisplay(display);
+        game.setInput(input);
+
+        quit = game.start() == UserInput::QUIT;
+
+    } while (!quit);
 
     display->close();
-
     return 0;
 }

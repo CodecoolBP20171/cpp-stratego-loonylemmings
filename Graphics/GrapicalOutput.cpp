@@ -64,7 +64,10 @@ bool GrapicalOutput::loadMedia() {
         SDL_FreeSurface(loadedSurface);
     }
 
-    printPause();
+    SDL_Rect bg = dParts.window.getRect();
+    SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
+    SDL_RenderPresent(gRenderer.get());
+    SDL_Delay(3000);
     return true;
 }
 
@@ -89,12 +92,6 @@ GrapicalOutput::GrapicalOutput()
     if( !loadMedia() ) { printf( "Failed to load media!\n" );}
 }
 
-void GrapicalOutput::printPause(){
-    SDL_Rect bg = dParts.window.getRect();
-    SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
-    SDL_RenderPresent(gRenderer.get());
-}
-
 void GrapicalOutput::printOut() {
 
     SDL_RenderClear(gRenderer.get());
@@ -113,13 +110,13 @@ void GrapicalOutput::drawSelection() {
 
     auto highlight = game.lock();
 
-    if (highlight->selected > 0) {
+    if (highlight->getSelected() > 0) {
         SDL_SetRenderDrawColor( gRenderer.get(), 0x00, 0xFF, 0x00, 0xFF );
-        drawFrame(highlight->selected);
+        drawFrame(highlight->getSelected());
     }
-    if (highlight->wrong > 0) {
+    if (highlight->getError() > 0) {
         SDL_SetRenderDrawColor( gRenderer.get(), 0xFF, 0x00, 0x00, 0xFF );
-        drawFrame(highlight->wrong);
+        drawFrame(highlight->getError());
     }
 }
 
@@ -135,15 +132,16 @@ void GrapicalOutput::drawFrame(int index) {
 
 void GrapicalOutput::drawButtons() {
 
-    auto button = game.lock();
+    auto parts = game.lock();
+    auto buttons = &parts->getButtons();
 
-    if (button->okBtn) {
+    if (buttons->at("okBtn")) {
         drawBtn("OkBTN", dParts.okBTN);
     }
-    if (button->resetBtn) {
+    if (buttons->at("resetBtn")) {
         drawBtn("ResetBTN", dParts.resetBTN);
     }
-    if (button->restartBtn) {
+    if (buttons->at("restartBtn")) {
         drawBtn("RestartBTN", dParts.restartBTN);
     }
 }
@@ -156,24 +154,19 @@ void GrapicalOutput::drawBtn(std::string name, DPElem button) {
 void GrapicalOutput::drawBoard() {
 
     auto objects = game.lock();
-    auto stash = objects->stash.lock();
-
-    auto size = stash->size();
+    auto size = objects->getStashSize();
 
     for (int i= 0; i<size; i++) {
-        if ((*stash)[i]) {
-            std::string name = (*stash)[i]->getShortName();
+            std::string name = objects->getCardFromStash(i)->getShortName();
             DPBase obj = dParts.stash.getCoords(i);
             SDL_Rect ins = dParts.field.getRect(obj);
             SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);
         }
-    }
 
     for (int i= 0; i<100; i++) {
-        if ((*objects->board)[i]) {
-            std::string name = (*objects->board)[i]->isFaceUp()
-                               ? (*objects->board)[i]->getShortName()
-                               : (*objects->board)[i]->getBackSide();
+        if (objects->isCardInBoardAt(i)) {
+            auto card = &objects->getCardFromBoard(i);
+            auto name = (*card)->isFaceUp() ? (*card)->getShortName() : (*card)->getBackSide();
             DPBase obj = dParts.board.getCoords(i);
             SDL_Rect ins = dParts.field.getRect(obj);
             SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);

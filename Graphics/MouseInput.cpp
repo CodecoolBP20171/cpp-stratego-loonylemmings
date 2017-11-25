@@ -31,7 +31,7 @@ MouseInput::InputType MouseInput::getUserInput() {
                         return RESET;
                     }
                     case DisplayParts::DisplayPart::RESTART : {
-                        break;
+                        return RESTART;
                     }
                     default: {
                         return NOTHING;

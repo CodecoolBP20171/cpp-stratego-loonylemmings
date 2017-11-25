@@ -9,9 +9,7 @@
 #include <bits/unique_ptr.h>
 #include <bits/shared_ptr.h>
 
-#include "../GameObjects/Player.hpp"
-#include "../GameObjects/Card.hpp"
-#include "../GameObjects/GameParts.hpp"
+#include "../GameObjects/GameParts.h"
 
 class StepValidator {
 

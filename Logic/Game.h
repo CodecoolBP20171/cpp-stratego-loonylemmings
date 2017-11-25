@@ -18,7 +18,7 @@ public:
     void setDisplay(std::shared_ptr<Display>& screen) { out = screen; }
     void setInput(std::shared_ptr<UserInput>& user) { in = user; }
 
-    void start();
+    UserInput::InputType start();
 
 private:
     std::weak_ptr<Display> out;
@@ -30,9 +30,9 @@ private:
     void fillStash();
     void reset();
 
-    bool placeCards();
+    UserInput::InputType placeCards();
     void step(int index);
-    void nextPlayer();
+    void initGame();
 };
 
 

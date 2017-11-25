@@ -21,7 +21,7 @@ class Card {
 
 public:
 
-    Card(int rank, std::shared_ptr<Player> player)
+    Card(int rank, std::shared_ptr<Player>& player)
         : rank(rank), owner(player)
     {
         faceUp = true;
@@ -35,6 +35,7 @@ public:
     int getMaxMove() const{ return maxMove; }
     std::string getBackSide() const { return backSide; }
     std::string getShortName() const { return shortName; };
+    std::shared_ptr<Player> getOwner() const { return owner.lock(); };
 
     Card* getBattleResult(Card* attacker) {
 
@@ -55,7 +56,7 @@ public:
 
 private:
     const int rank;
-    std::shared_ptr<Player> owner;
+    std::weak_ptr<Player> owner;
     int maxMove;
     bool faceUp;
     std::string shortName;

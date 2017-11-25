@@ -8,7 +8,7 @@
 #include <memory>
 #include <bits/unique_ptr.h>
 #include <bits/shared_ptr.h>
-#include "../GameObjects/GameParts.hpp"
+#include "../GameObjects/GameParts.h"
 
 class Display {
 
@@ -17,7 +17,6 @@ public:
     virtual ~Display() = default;
 
     virtual void printOut() = 0;
-    virtual void printPause() = 0;
 
     virtual void setResource(std::shared_ptr<GameParts>& parts) = 0;
     virtual void close() = 0;

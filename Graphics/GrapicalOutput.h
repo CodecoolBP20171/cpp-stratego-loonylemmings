@@ -18,7 +18,6 @@
 #include "Display.hpp"
 #include "Init/DisplayParts.hpp"
 #include "Init/Tileset.hpp"
-#include "../GameObjects/GameParts.hpp"
 
 class GrapicalOutput : public Display {
 
@@ -27,7 +26,6 @@ public:
 
     void setResource(std::shared_ptr<GameParts>& parts) override;
     void printOut() override;
-    void printPause() override;
     void close() override;
 
 private:
