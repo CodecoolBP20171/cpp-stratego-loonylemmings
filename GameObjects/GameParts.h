@@ -79,6 +79,9 @@ public:
     int getError() { return wrong; }
     void setError(int index) { wrong = index; }
 
+    int getTarget() { return target; }
+    void setTarget(int index) { target = index; }
+
 private:
 
     std::shared_ptr<Player> player1;
@@ -93,6 +96,7 @@ private:
 
     int selected;
     int wrong;
+    int target;
 
     std::map<std::string, bool> buttons;
 

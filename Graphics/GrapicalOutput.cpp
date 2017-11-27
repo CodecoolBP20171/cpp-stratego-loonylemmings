@@ -118,6 +118,10 @@ void GrapicalOutput::drawSelection() {
         SDL_SetRenderDrawColor( gRenderer.get(), 0xFF, 0x00, 0x00, 0xFF );
         drawFrame(highlight->getError());
     }
+    if (highlight->getTarget() >= 0) {
+        SDL_SetRenderDrawColor( gRenderer.get(), 0xFF, 0xFF, 0x00, 0xFF );
+        drawFrame(highlight->getTarget());
+    }
 }
 
 void GrapicalOutput::drawFrame(int index) {
@@ -213,7 +217,7 @@ void GrapicalOutput::printBattle() {
     SDL_Rect card = dParts.field.getRectForBattleInfoAttacker();
     SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &card);
 
-    index = objects->getError();
+    index = objects->getTarget();
     name = objects->getCardFromBoard(index)->getShortName();
 
     dParts.field.setRectForBattleInfoDefender(card);
@@ -224,11 +228,18 @@ void GrapicalOutput::printBattle() {
 
 void GrapicalOutput::printWin() {
     printInfo();
+
     SDL_Rect msg = dParts.info.getRect();
     SDL_RenderCopy(gRenderer.get(), pictures["Win"].get(), nullptr, &msg);
 
+    auto objects = game.lock();
+    auto index = objects->getTarget();
+    auto name = objects->getCardFromBoard(index)->getShortName();
+
     SDL_Rect card = dParts.field.getRectForFlag();
-    SDL_RenderCopy(gRenderer.get(), pictures["P1R0"].get(), nullptr, &card);
+    SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &card);
+
+    drawBtn("RestartBTN", dParts.restartBTN);
 
     SDL_RenderPresent(gRenderer.get());
 }

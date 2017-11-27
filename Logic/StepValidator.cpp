@@ -119,13 +119,19 @@ bool StepValidator::checkStep(int index) {
     }
 
     if (isValidRange(selected, index)) {
-        if (owner) battle = true;
+        if (owner) {
+            battle = true;
+            game->setTarget(index);
+        }
         return true;
     }
 
     if (game->getCardFromBoard(selected)->getMaxMove() == 10
         && isReacheableForAScout(selected, index)) {
-        if (owner) battle = true;
+        if (owner) {
+            battle = true;
+            game->setTarget(index);
+        }
         return true;
     }
 

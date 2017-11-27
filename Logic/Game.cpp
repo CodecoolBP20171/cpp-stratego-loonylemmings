@@ -116,13 +116,34 @@ UserInput::InputType Game::battle() {
 
     display->printBattle();
 
-    auto to = gameObjects->getError();
+    auto to = gameObjects->getTarget();
     auto from = gameObjects->getSelected();
 
     validator.cancelBattle();
 
-    gameObjects->setError(-1);
+    if (gameObjects->getCardFromBoard(to)->getRank() == 0) {
+
+        auto option = input->getUserInput();
+        if (option == UserInput::QUIT) return option;
+        display->printWin();
+
+        gameObjects->setTarget(-1);
+
+        bool quit = false;
+        while(!quit) {
+            switch (input->getUserInput()) {
+                case UserInput::QUIT : {
+                    return UserInput::QUIT;
+                }
+                case UserInput::RESTART : {
+                    return UserInput::RESTART;
+                }
+            }
+        }
+    }
+
     gameObjects->setSelected(-1);
+    gameObjects->setTarget(-1);
 
     gameObjects->flipCardsDown();
     gameObjects->hideReset();
@@ -219,10 +240,7 @@ UserInput::InputType Game::round() {
             }
 
             case UserInput::OK : {
-                if (validator.checkBattle()) {
-                    gameObjects->setError(to);
-                    return battle();
-                }
+                if (validator.checkBattle()) { return battle(); }
                 gameObjects->switchPlayers();
                 gameObjects->flipCards();
                 display->printPause();
