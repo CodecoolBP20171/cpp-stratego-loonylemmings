@@ -9,7 +9,7 @@ int main( int argc, char* args[] ) {
     std::shared_ptr<Display> display(new GrapicalOutput());
     std::shared_ptr<UserInput> input(new MouseInput());
 
-    bool quit = false;
+    bool quit;
 
     do {
         Game game;

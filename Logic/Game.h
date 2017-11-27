@@ -33,6 +33,7 @@ private:
     void step(int index);
 
     UserInput::InputType placeCards();
+    void battle();
     UserInput::InputType round();
 
 };

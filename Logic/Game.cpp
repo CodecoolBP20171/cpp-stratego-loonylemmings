@@ -59,6 +59,7 @@ UserInput::InputType Game::placeCards() {
 
     bool quit = false;
     gameObjects->showOk();
+    gameObjects->showRestart();
     display->printOut();
 
     while(!quit) {
@@ -71,7 +72,7 @@ UserInput::InputType Game::placeCards() {
                 if (validator.checkPlacement(index)) {
                     step(index);
                     //if (gameObjects->isActualStashEmpty()) { gameObjects->showOk(); }
-                    //gameObjects->showReset();
+                    gameObjects->showReset();
                     }
                 break;
             }
@@ -107,6 +108,52 @@ UserInput::InputType Game::placeCards() {
     }
 }
 
+void Game::battle() {
+    auto display = out.lock();
+    auto input = in.lock();
+
+    auto to = gameObjects->getError();
+    auto from = gameObjects->getSelected();
+
+    gameObjects->setError(-1);
+    gameObjects->setSelected(-1);
+
+    gameObjects->flipCardsDown();
+    gameObjects->hideButtons();
+    gameObjects->flipCard(from);
+    gameObjects->flipCard(to);
+    display->printOut();
+
+    auto defender = &gameObjects->getCardFromBoard(to);
+    auto attacker = &gameObjects->getCardFromBoard(from);
+    auto result = (*defender)->getBattleResult(*attacker);
+
+    if (result == 'a' || result == 'n') {
+        gameObjects->moveCardFromBoardToStash(to);
+        if (result == 'a') {
+            gameObjects->setSelected(from);
+            step(to);
+            gameObjects->setSelected(-1);
+        }
+        input->getUserInput();
+        display->printOut();
+    }
+
+    gameObjects->switchPlayers();
+
+    if (result == 'd' || result == 'n') {
+        gameObjects->moveCardFromBoardToStash(from);
+        input->getUserInput();
+        display->printOut();
+    }
+
+    if (gameObjects->isCardInBoardAt(from)) gameObjects->flipCard(from);
+    if (gameObjects->isCardInBoardAt(to)) gameObjects->flipCard(to);
+
+    input->getUserInput();
+    display->printOut();
+}
+
 UserInput::InputType Game::round() {
     auto display = out.lock();
     auto input = in.lock();
@@ -115,6 +162,8 @@ UserInput::InputType Game::round() {
     int from;
     int to;
     gameObjects->flipPlayerCardsUp();
+    gameObjects->setSelected(-1);
+    gameObjects->showRestart();
     display->printOut();
 
     while(!quit) {
@@ -151,6 +200,11 @@ UserInput::InputType Game::round() {
             }
 
             case UserInput::OK : {
+                if (validator.checkBattle()) {
+                    gameObjects->setError(to);
+                    battle();
+                    return UserInput::OK;
+                }
                 if (stepDone) {
                     gameObjects->flipCardsDown();
                     gameObjects->switchPlayers();
@@ -188,9 +242,3 @@ UserInput::InputType Game::start() {
 
     return result;
 }
-
-
-
-
-
-

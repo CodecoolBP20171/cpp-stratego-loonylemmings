@@ -14,14 +14,15 @@
 class StepValidator {
 
 public:
-    StepValidator();
-    virtual ~StepValidator();
+    StepValidator() : battle(false) {}
+    virtual ~StepValidator() = default;
 
     void setGameObjects(std::shared_ptr<GameParts>& go) { gameObjects = go; }
 
     bool isMovableCard(int index);
     bool isInside(int x, int y);
     bool isInTheLake(int index);
+    bool hasSpaceToMove(int index);
     bool isValidRange(int from, int to);
     bool isReacheableForAScout(int from, int to);
 

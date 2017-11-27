@@ -5,10 +5,6 @@
 #include <iostream>
 #include "StepValidator.h"
 
-StepValidator::StepValidator() {}
-
-StepValidator::~StepValidator() {}
-
 bool StepValidator::checkPlacement(int index) {
 
     auto game = gameObjects.lock();
@@ -31,25 +27,32 @@ bool StepValidator::checkPlacement(int index) {
     return false;
 }
 
-bool StepValidator::isInside(int x, int y) { return (x >= 0)&&(x < 10)&&(y >= 0)&&(y<10); }
+bool StepValidator::isInside(int x, int y) {
+    return (x >= 0)&&(x < 10)&&(y >= 0)&&(y<10);
+}
 
 bool StepValidator::isMovableCard(int index) {
     auto game = gameObjects.lock();
+    return game->getCardFromBoard(index)->getMaxMove() != 0;
+}
 
-    //check if card not bomb or flag
-    if (game->getCardFromBoard(index)->getMaxMove() == 0) return false;
+bool StepValidator::hasSpaceToMove(int index) {
+    auto game = gameObjects.lock();
+    auto player = game->getActualPlayer();
 
-    //check if card has space to move
-    int x = index%10;
-    int y = (index >= 10) ? (index-x)/10 : 0;
+    int ox = index%10;
+    int oy = (index >= 10) ? (index-ox)/10 : 0;
+    int y = oy-1;
+    int x = ox;
 
-    for (int i = -1; i < 2; i++) {
-        for (int j = -1; j < 2; j++) {
-            if (!isInside(x+j, y+i)) continue;
-            if (!game->isCardInBoardAt(index+10*i+j) && !isInTheLake(index+10*i+j)) {
-                return true;
-            }
+    for (int i = 0; i < 4; ++i) {
+        auto check = y*10+x;
+        if (isInside(x, y) && !isInTheLake(check)) {
+            if (!game->isCardInBoardAt(check)) { return true; }
+            if (game->getOwnerAt(check) != player) { return true; }
         }
+        y = (x == ox-1) ? oy : y+1;
+        x = (x == ox) ? x-1 : (y == oy) ? ox+1 : ox;
     }
     return false;
 }
@@ -62,8 +65,8 @@ bool StepValidator::isInTheLake(int index) {
 bool StepValidator::isValidRange(int from, int to) {
     if (isInTheLake(to)) return false;
     auto dist = from-to;
-    return dist == 1 || (dist>=9 && dist<=11)
-           || dist == -1 || (dist>=-11 && dist<=-9);
+
+    return dist == 1 || dist == 10 || dist == -1 || dist == -10;
 }
 
 bool StepValidator::isReacheableForAScout(int from, int to) {
@@ -73,15 +76,10 @@ bool StepValidator::isReacheableForAScout(int from, int to) {
     int sy = (from>=10) ? (from-sx)/10 : 0;
     int ex = to%10;
     int ey = (to>=10) ? (to-ex)/10 : 0;
-    int step;
 
-    if (sx == ex) {
-        step = 10;
-    } else if (sy == ey) {
-        step = 1;
-    } else {
-        return false;
-    }
+    int step = (sx == ex) ? 10 : (sy == ey) ? 1 : 0;
+    if (step == 0) return false;
+
     auto game = gameObjects.lock();
     if (from>to) { step = 0-step; }
 
@@ -96,7 +94,6 @@ bool StepValidator::checkStep(int index) {
     battle = false;
     auto game = gameObjects.lock();
 
-    // clicked on stash = error
     if (index>99) {
         game->setError(index);
         return false;
@@ -105,34 +102,33 @@ bool StepValidator::checkStep(int index) {
     auto owner = game->getOwnerAt(index);
     auto player = game->getActualPlayer();
 
-    // clicked on own movable card = select
-    if (owner == player && isMovableCard(index)) {
-        game->setSelected(index);
+    if (owner == player) {
+        if (hasSpaceToMove(index) && isMovableCard(index)) {
+            game->setSelected(index);
+            return false;
+        }
+        game->setError(index);
         return false;
     }
 
     auto selected = game->getSelected();
 
-    // nothing selected = error
     if (selected < 0) {
         game->setError(index);
         return false;
     }
 
-    // reacheable range for scout = true
+    if (isValidRange(selected, index)) {
+        if (owner) battle = true;
+        return true;
+    }
+
     if (game->getCardFromBoard(selected)->getMaxMove() == 10
         && isReacheableForAScout(selected, index)) {
-        battle = owner && owner != player;
+        if (owner) battle = true;
         return true;
     }
 
-    // any other cards 1 step range valid field = true
-    if (isValidRange(selected, index)) {
-        battle = owner && owner != player;
-        return true;
-    }
-
-    // invalid field
     game->setError(index);
     return false;
 }

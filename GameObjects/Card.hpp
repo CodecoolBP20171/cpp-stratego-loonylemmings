@@ -37,15 +37,15 @@ public:
     std::string getShortName() const { return shortName; };
     std::shared_ptr<Player> getOwner() const { return owner.lock(); };
 
-    Card* getBattleResult(Card* attacker) {
+    char getBattleResult(std::unique_ptr<Card>& attacker) {
 
         int attackerRank = attacker->getRank();
 
-        if (attackerRank > rank) return attacker;
-        if (attackerRank == rank) return nullptr;
-        if ((attackerRank == 1)&&(rank == 10)) return attacker;
-        if ((attackerRank == 3)&&(rank == 11)) return attacker;
-        return this;
+        if (attackerRank > rank) return 'a';
+        if (attackerRank == rank) return 'n';
+        if ((attackerRank == 1)&&(rank == 10)) return 'a';
+        if ((attackerRank == 3)&&(rank == 11)) return 'a';
+        return 'd';
     }
 
     bool isAvailableMoveRange(int move) { return maxMove >= move; }

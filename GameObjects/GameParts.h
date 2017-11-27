@@ -59,11 +59,14 @@ public:
     void hideButtons() {
         buttons["okBtn"] = false;
         buttons["resetBtn"] = false;
+        buttons["restartBtn"] = false;
     }
     void showOk() { buttons["okBtn"] = true; }
     void showReset() { buttons["resetBtn"] = true; }
+    void showRestart() { buttons["restartBtn"] = true; }
     void hideOk() { buttons["okBtn"] = false; }
     void hideReset() { buttons["resetBtn"] = false; }
+    void hideRestart() { buttons["restartBtn"] = false; }
 
     std::map<std::string, bool>& getButtons() { return buttons; }
 
