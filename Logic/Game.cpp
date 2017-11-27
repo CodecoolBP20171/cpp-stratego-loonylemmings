@@ -234,6 +234,7 @@ UserInput::InputType Game::round() {
                     gameObjects->setSelected(to);
                     step(from);
                 } else validator.cancelBattle();
+                gameObjects->setTarget(-1);
                 gameObjects->hideReset();
                 stepDone = false;
                 break;
