@@ -27,6 +27,18 @@ public:
         sel.x++; sel.y++; sel.w -= 2; sel.h -= 2;
     }
 
+    SDL_Rect getRectForBattleInfoAttacker() const {
+        return {420, 320, cardW, cardH};
+    }
+
+    void setRectForBattleInfoDefender(SDL_Rect &sel) const {
+        sel.x += cardW + 15;
+    }
+
+    SDL_Rect getRectForFlag() const {
+        return {450, 345, cardW, cardH};
+    }
+
     const int gap;
     const int cellW;
     const int cellH;

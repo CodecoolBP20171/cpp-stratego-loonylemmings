@@ -114,7 +114,7 @@ UserInput::InputType Game::battle() {
     auto display = out.lock();
     auto input = in.lock();
 
-    display->printPause();
+    display->printBattle();
 
     auto to = gameObjects->getError();
     auto from = gameObjects->getSelected();

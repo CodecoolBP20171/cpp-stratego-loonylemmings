@@ -40,6 +40,8 @@ private:
         themeSet["ResetBTN"] = route + "ResetBTN.png";
         themeSet["RestartBTN"] = route + "RestartBTN.png";
         themeSet["Pause"] = route + "Waiting.png";
+        themeSet["Battle"] = route + "Battle.png";
+        themeSet["Win"] = route + "Win.png";
     }
 };
 

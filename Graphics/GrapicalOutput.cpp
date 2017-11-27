@@ -174,7 +174,7 @@ void GrapicalOutput::drawBoard() {
     }
 }
 
-void GrapicalOutput::printPause() {
+void GrapicalOutput::printInfo() {
 
     SDL_RenderClear(gRenderer.get());
     SDL_Rect bg = dParts.window.getRect();
@@ -191,10 +191,44 @@ void GrapicalOutput::printPause() {
             SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);
         }
     }
+}
 
-    SDL_Rect msg = dParts.pause.getRect();
+void GrapicalOutput::printPause() {
+    printInfo();
+    SDL_Rect msg = dParts.info.getRect();
     SDL_RenderCopy(gRenderer.get(), pictures["Pause"].get(), nullptr, &msg);
+    SDL_RenderPresent(gRenderer.get());
+}
+
+void GrapicalOutput::printBattle() {
+    printInfo();
+    SDL_Rect msg = dParts.info.getRect();
+    SDL_RenderCopy(gRenderer.get(), pictures["Battle"].get(), nullptr, &msg);
+
+    auto objects = game.lock();
+
+    auto index = objects->getSelected();
+    auto name = objects->getCardFromBoard(index)->getShortName();
+
+    SDL_Rect card = dParts.field.getRectForBattleInfoAttacker();
+    SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &card);
+
+    index = objects->getError();
+    name = objects->getCardFromBoard(index)->getShortName();
+
+    dParts.field.setRectForBattleInfoDefender(card);
+    SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &card);
 
     SDL_RenderPresent(gRenderer.get());
+}
 
+void GrapicalOutput::printWin() {
+    printInfo();
+    SDL_Rect msg = dParts.info.getRect();
+    SDL_RenderCopy(gRenderer.get(), pictures["Win"].get(), nullptr, &msg);
+
+    SDL_Rect card = dParts.field.getRectForFlag();
+    SDL_RenderCopy(gRenderer.get(), pictures["P1R0"].get(), nullptr, &card);
+
+    SDL_RenderPresent(gRenderer.get());
 }

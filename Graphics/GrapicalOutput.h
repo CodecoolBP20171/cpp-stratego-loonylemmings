@@ -27,6 +27,8 @@ public:
     void setResource(std::shared_ptr<GameParts>& parts) override;
     void printOut() override;
     void printPause() override;
+    void printBattle() override;
+    void printWin() override;
     void close() override;
 
 private:
@@ -52,6 +54,8 @@ private:
     void drawFrame(int index);
     void drawButtons();
     void drawBtn(std::string name, DPElem button);
+
+    void printInfo();
 };
 
 

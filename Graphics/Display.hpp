@@ -18,6 +18,8 @@ public:
 
     virtual void printOut() = 0;
     virtual void printPause() = 0;
+    virtual void printBattle() = 0;
+    virtual void printWin() = 0;
 
     virtual void setResource(std::shared_ptr<GameParts>& parts) = 0;
     virtual void close() = 0;

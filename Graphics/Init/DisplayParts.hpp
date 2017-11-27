@@ -24,7 +24,7 @@ public:
     const DPElem okBTN = DPElem(639, 509, 151, 101);
     const DPElem restartBTN = DPElem(810, 510, 101, 45);
     const DPElem resetBTN = DPElem(810, 563, 101, 46);
-    const DPElem pause = DPElem(255, 190, 453, 252);
+    const DPElem info = DPElem(255, 190, 453, 252);
 
     DisplayPart getPart(DPBase& index) {
         if (board.isInside(index)) return BOARD;
