@@ -138,5 +138,3 @@ bool StepValidator::checkStep(int index) {
     game->setError(index);
     return false;
 }
-
-

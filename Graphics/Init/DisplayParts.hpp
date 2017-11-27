@@ -25,6 +25,7 @@ public:
     const DPElem restartBTN = DPElem(810, 510, 101, 45);
     const DPElem resetBTN = DPElem(810, 563, 101, 46);
     const DPElem info = DPElem(255, 190, 453, 252);
+    const DPElem battle = DPElem(255, 180, 453, 285);
 
     DisplayPart getPart(DPBase& index) {
         if (board.isInside(index)) return BOARD;

@@ -28,7 +28,7 @@ public:
     }
 
     SDL_Rect getRectForBattleInfoAttacker() const {
-        return {420, 320, cardW, cardH};
+        return {415, 300, cardW, cardH};
     }
 
     void setRectForBattleInfoDefender(SDL_Rect &sel) const {

@@ -206,7 +206,7 @@ void GrapicalOutput::printPause() {
 
 void GrapicalOutput::printBattle() {
     printInfo();
-    SDL_Rect msg = dParts.info.getRect();
+    SDL_Rect msg = dParts.battle.getRect();
     SDL_RenderCopy(gRenderer.get(), pictures["Battle"].get(), nullptr, &msg);
 
     auto objects = game.lock();
