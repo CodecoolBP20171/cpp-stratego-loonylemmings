@@ -29,6 +29,7 @@ public:
     bool checkPlacement(int index);
     bool checkStep(int index);
     bool checkBattle() { return battle; };
+    void cancelBattle() { battle = false; };
 
 private:
     std::weak_ptr<GameParts> gameObjects;

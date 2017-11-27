@@ -26,6 +26,13 @@ public:
             }
         }
     }
+
+    void flipAllCards() {
+        for (auto i=0; i<100; i++) {
+            if (board[i]) flip(i);
+        }
+    }
+
     void flip(int index) { board[index]->flip(); }
 
     bool isCardAt(int index) { return board[index]!= nullptr;}

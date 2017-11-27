@@ -38,6 +38,7 @@ public:
 
     //board operations
 
+    void flipCards();
     void flipCardsDown();
     void flipPlayerCardsUp();
     void destroyPlayerCards();

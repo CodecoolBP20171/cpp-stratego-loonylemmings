@@ -173,3 +173,28 @@ void GrapicalOutput::drawBoard() {
         }
     }
 }
+
+void GrapicalOutput::printPause() {
+
+    SDL_RenderClear(gRenderer.get());
+    SDL_Rect bg = dParts.window.getRect();
+    SDL_RenderCopy(gRenderer.get(), pictures["Board"].get(), nullptr, &bg);
+
+    auto objects = game.lock();
+
+    for (int i= 0; i<100; i++) {
+        if (objects->isCardInBoardAt(i)) {
+            auto card = &objects->getCardFromBoard(i);
+            auto name = (*card)->getBackSide();
+            DPBase obj = dParts.board.getCoords(i);
+            SDL_Rect ins = dParts.field.getRect(obj);
+            SDL_RenderCopy(gRenderer.get(), pictures[name].get(), nullptr, &ins);
+        }
+    }
+
+    SDL_Rect msg = dParts.pause.getRect();
+    SDL_RenderCopy(gRenderer.get(), pictures["Pause"].get(), nullptr, &msg);
+
+    SDL_RenderPresent(gRenderer.get());
+
+}

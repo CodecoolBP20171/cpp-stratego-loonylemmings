@@ -67,6 +67,7 @@ card_uptr& GameParts::getCardFromStash(int index) { return (*activeStash.lock())
 //board operations
 
 void GameParts::flipCardsDown() { board->flipAllCardsFaceDown(); }
+void GameParts::flipCards() { board->flipAllCards(); }
 
 void GameParts::flipPlayerCardsUp() {
     auto player = activePlayer.lock();

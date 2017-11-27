@@ -39,6 +39,7 @@ private:
         themeSet["OkBTN"] = route + "OkBTN.png";
         themeSet["ResetBTN"] = route + "ResetBTN.png";
         themeSet["RestartBTN"] = route + "RestartBTN.png";
+        themeSet["Pause"] = route + "Waiting.png";
     }
 };
 
