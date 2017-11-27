@@ -15,7 +15,7 @@ bool GrapicalOutput::init() {
     }
 
     std::unique_ptr<SDL_Window, sdl_deleter> window(
-            SDL_CreateWindow("Startego Wars", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+            SDL_CreateWindow("Stratego", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                              dParts.window.width, dParts.window.height, SDL_WINDOW_SHOWN),
             sdl_deleter());
     if( !window ) {
@@ -67,7 +67,7 @@ bool GrapicalOutput::loadMedia() {
     SDL_Rect bg = dParts.window.getRect();
     SDL_RenderCopy(gRenderer.get(), pictures["Splash"].get(), nullptr, &bg);
     SDL_RenderPresent(gRenderer.get());
-    SDL_Delay(3000);
+    SDL_Delay(6000);
     return true;
 }
 
